@@ -8,7 +8,7 @@ import '@radix-ui/themes/styles.css';
 
 // Your global styles
 
-import Header from './Header';
+import Header from '../components/Header';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
