@@ -1,0 +1,17 @@
+.ticket {
+  color: #456789;
+  width: 100%;
+  padding: 0.2em;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #000;
+}
+
+/** Selected Ticket Styles */
+
+.selectedTicket {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  padding: 0.2em;
+}

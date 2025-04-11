@@ -1,8 +1,6 @@
 .box {
-  background-color: #007bff;
   color: white;
   padding: 20px;
-  /* text-align: center; */
   font-size: 1.2em;
   border-radius: 8px;
 }
@@ -11,6 +9,28 @@
   list-style-type: none;
 }
 
+.column {
+  height: 100%;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.open {
+  border-color: #ccc;
+  background-color: #eee;
+}
+
+.inProgress {
+  border-color: #999;
+  background-color: #bbb;
+}
+
+.done {
+  border-color: #666;
+  background-color: #888;
+}
 /* Tablet (2 columns) */
 @media (max-width: 1024px) {
   .box:nth-child(3) {

@@ -1,10 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface ITicket extends Document {
+  _id: mongoose.Schema.Types.ObjectId;
   project_id: mongoose.Schema.Types.ObjectId;
   title: string;
   description?: string;
-  status?: 'open' | 'inProgress' | 'done';
+  status?: 'open' | 'inProgress' | 'closed';
   priority?: 'low' | 'medium' | 'high' | 'critical';
   points?: number;
   // assignee?: mongoose.Schema.Types.ObjectId;
@@ -24,7 +25,7 @@ const ticketSchema = new Schema<ITicket>({
   description: String,
   status: {
     type: String,
-    enum: ['open', 'inProgress', 'done'],
+    enum: ['open', 'inProgress', 'closed'],
     default: 'open',
   },
   priority: {
