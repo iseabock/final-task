@@ -42,6 +42,28 @@ const ProjectPage = () => {
     }
   };
 
+  const updateTicketStatus = async (ticketId: string, newStatus: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tickets/${ticketId}`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticketId, status: newStatus }),
+        }
+      );
+
+      if (!res.ok) throw new Error('Failed to update ticket status');
+      const updatedTicket = await res.json();
+
+      setTickets((prev) =>
+        prev.map((t) => (t._id.toString() === ticketId ? updatedTicket : t))
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     fetchTickets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,7 +77,7 @@ const ProjectPage = () => {
     setCurrentTicket(ticket);
   };
 
-  const todo = tickets.filter((t) => t.status === 'open');
+  const open = tickets.filter((t) => t.status === 'open');
   const inProgress = tickets.filter((t) => t.status === 'inProgress');
   const closed = tickets.filter((t) => t.status === 'closed');
 
@@ -65,12 +87,20 @@ const ProjectPage = () => {
       <Flex gap="3">
         <Box width="66.6%">
           <Flex gap="3" align="start">
-            <Box width="33.3%" className={`${styles.open}  ${styles.column}`}>
+            <Box
+              width="33.3%"
+              className={`${styles.open}  ${styles.column}`}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                const ticketId = e.dataTransfer.getData('ticketId');
+                updateTicketStatus(ticketId, 'open');
+              }}
+            >
               <Heading size="3" mb="2">
                 Open
               </Heading>
 
-              {todo?.map((ticket) => (
+              {open?.map((ticket) => (
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
@@ -82,6 +112,11 @@ const ProjectPage = () => {
             <Box
               width="33.3%"
               className={`${styles.inProgress}  ${styles.column}`}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                const ticketId = e.dataTransfer.getData('ticketId');
+                updateTicketStatus(ticketId, 'inProgress');
+              }}
             >
               <Heading size="3" mb="2">
                 In Progress
@@ -95,7 +130,15 @@ const ProjectPage = () => {
               ))}
             </Box>
 
-            <Box width="33.3%" className={`${styles.done}  ${styles.column}`}>
+            <Box
+              width="33.3%"
+              className={`${styles.done}  ${styles.column}`}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                const ticketId = e.dataTransfer.getData('ticketId');
+                updateTicketStatus(ticketId, 'closed');
+              }}
+            >
               <Heading size="3" mb="2">
                 Done
               </Heading>

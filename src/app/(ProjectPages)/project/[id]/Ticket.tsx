@@ -18,8 +18,17 @@ const Ticket = ({
   const priorityClass =
     styles[ticket.priority.toLowerCase() as keyof typeof styles];
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData('ticketId', ticket._id.toString());
+  };
+
   return (
-    <Box className={`${styles.ticket} ${priorityClass}`} onClick={handleClick}>
+    <Box
+      draggable
+      onDragStart={handleDragStart}
+      className={`${styles.ticket} ${priorityClass}`}
+      onClick={handleClick}
+    >
       <Heading
         className={styles.heading}
         size="3"
