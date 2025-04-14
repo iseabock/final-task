@@ -1,17 +1,52 @@
 .ticket {
   color: #456789;
-  width: 100%;
-  padding: 0.2em;
+  max-width: 100%;
+  padding: 0.2em 0.5em;
   margin-bottom: 10px;
   border-radius: 5px;
-  border: 1px solid #000;
+  border: 3px solid #000;
+}
+
+.heading {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.description {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.low {
+  border-color: #f5ea88;
+  background-color: #f8f2bf;
+}
+
+.medium {
+  border-color: #fba77a;
+  background-color: #f8c1a4;
+}
+
+.high {
+  border-color: #f6873e;
+  background-color: #f4a570;
+}
+
+.critical {
+  border-color: #f66674;
+  background-color: #f98f9a;
 }
 
 /** Selected Ticket Styles */
 
 .selectedTicket {
   width: 100%;
-  border: 2px solid #ccc;
+  border-width: 2px;
+  border-style: solid;
   border-radius: 5px;
   padding: 0.2em;
 }

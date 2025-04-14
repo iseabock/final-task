@@ -5,8 +5,8 @@ export interface ITicket extends Document {
   project_id: mongoose.Schema.Types.ObjectId;
   title: string;
   description?: string;
-  status?: 'open' | 'inProgress' | 'closed';
-  priority?: 'low' | 'medium' | 'high' | 'critical';
+  status: 'open' | 'inProgress' | 'closed';
+  priority: 'low' | 'medium' | 'high' | 'critical';
   points?: number;
   // assignee?: mongoose.Schema.Types.ObjectId;
   // created_by: mongoose.Schema.Types.ObjectId;
