@@ -114,7 +114,6 @@ export async function DELETE(req: NextRequest) {
   await connectDB();
   try {
     const id = await req.json();
-    // console.log('_id :', body);
 
     if (!id) {
       return NextResponse.json(

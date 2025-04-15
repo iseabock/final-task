@@ -1,10 +1,14 @@
 'use client';
 
-import { useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import { Button, Text, TextField } from '@radix-ui/themes';
+import mongoose from 'mongoose';
 
 import Modal from '@/components/Modal';
+import { IUser } from '@/db/models/User';
+
+import { useProjectUsers } from '../../../context/ProjectUsersContext';
 
 const initialState = {
   title: '',
@@ -44,6 +48,8 @@ const AddTicketModal = ({
   onTicketAdded: () => void;
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { getUsersForProject } = useProjectUsers();
+  const [users, setUsers] = useState<IUser[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +84,16 @@ const AddTicketModal = ({
       console.error('Error adding ticket:', error);
     }
   };
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      const data = await getUsersForProject(
+        projectId as unknown as mongoose.Schema.Types.ObjectId
+      );
+      setUsers(data as IUser[]);
+    };
+    loadUsers();
+  }, [projectId, getUsersForProject]);
 
   return (
     <Modal
@@ -180,24 +196,32 @@ const AddTicketModal = ({
             <Text as="div" size="2" mb="1" weight="bold">
               Assignee
             </Text>
-            <TextField.Root
-              placeholder="Assignee"
+            <select
+              name="assignee"
               value={state.assignee}
               onChange={(e) =>
                 dispatch({
                   type: 'SET_FIELD',
-                  field: 'name',
+                  field: 'assignee',
                   value: e.target.value,
                 })
               }
-            />
+            >
+              {users?.map((user) => {
+                return (
+                  <option key={user._id} value={user._id}>
+                    {user.name}
+                  </option>
+                );
+              })}
+            </select>
           </label>
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
               Created By
             </Text>
-            <TextField.Root
-              placeholder="Created By"
+            <select
+              name="createdBy"
               value={state.createdBy}
               onChange={(e) =>
                 dispatch({
@@ -206,7 +230,13 @@ const AddTicketModal = ({
                   value: e.target.value,
                 })
               }
-            />
+            >
+              {users.map((user) => (
+                <option key={user._id} value={user._id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
           </label>
           <label>
             <Text as="div" size="2" mb="1" weight="bold">

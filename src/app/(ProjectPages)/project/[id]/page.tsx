@@ -15,7 +15,7 @@ import Ticket from './Ticket';
 
 const ProjectPage = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
-  const [currentTicket, setCurrentTicket] = useState<ITicket | undefined>();
+  const [selectedTicket, setSelectedTicket] = useState<ITicket | undefined>();
   const params = useParams();
   const { id } = params;
 
@@ -34,8 +34,8 @@ const ProjectPage = () => {
 
       const data: ITicket[] = await res.json();
       setTickets(data);
-      if (currentTicket === undefined && data.length > 0) {
-        setCurrentTicket(data[0]);
+      if (selectedTicket === undefined && data.length > 0) {
+        setSelectedTicket(data[0]);
       }
     } catch (error) {
       console.error(error);
@@ -67,14 +67,23 @@ const ProjectPage = () => {
   useEffect(() => {
     fetchTickets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, currentTicket]);
+  }, [id]);
 
   const handleTicketAdded = () => {
     fetchTickets();
   };
 
-  const handleCurrentTicket = (ticket: ITicket) => {
-    setCurrentTicket(ticket);
+  const handleSelectedTicket = (ticket: ITicket) => {
+    setSelectedTicket(ticket);
+  };
+
+  const handleTicketDeleted = (deletedTicketId: string) => {
+    setTickets((prev) =>
+      prev.filter((t) => t._id.toString() !== deletedTicketId)
+    );
+    if (selectedTicket?._id?.toString() === deletedTicketId) {
+      setSelectedTicket(undefined);
+    }
   };
 
   const open = tickets.filter((t) => t.status === 'open');
@@ -84,9 +93,9 @@ const ProjectPage = () => {
   return (
     <>
       <h1>Project Tickets</h1>
-      <Flex gap="3">
+      <Flex className={styles.projectContainer} gap="3">
         <Box width="66.6%">
-          <Flex gap="3" align="start">
+          <Flex className={styles.ticketsContainer} gap="3" align="start">
             <Box
               width="33.3%"
               className={`${styles.open}  ${styles.column}`}
@@ -104,7 +113,7 @@ const ProjectPage = () => {
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
-                  onClick={() => handleCurrentTicket(ticket)}
+                  onClick={() => handleSelectedTicket(ticket)}
                 />
               ))}
             </Box>
@@ -125,7 +134,7 @@ const ProjectPage = () => {
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
-                  onClick={() => handleCurrentTicket(ticket)}
+                  onClick={() => handleSelectedTicket(ticket)}
                 />
               ))}
             </Box>
@@ -146,7 +155,7 @@ const ProjectPage = () => {
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
-                  onClick={() => handleCurrentTicket(ticket)}
+                  onClick={() => handleSelectedTicket(ticket)}
                 />
               ))}
             </Box>
@@ -157,17 +166,18 @@ const ProjectPage = () => {
             projectId={id as string}
             onTicketAdded={handleTicketAdded}
           />
-          {currentTicket && (
+          {selectedTicket && (
             <SelectedTicket
-              ticket={currentTicket}
+              ticket={selectedTicket}
               onTicketUpdated={(updatedTicket) => {
                 setTickets((prev) =>
                   prev.map((t) =>
                     t._id === updatedTicket._id ? updatedTicket : t
                   )
                 );
-                setCurrentTicket(updatedTicket);
+                setSelectedTicket(updatedTicket);
               }}
+              onTicketDeleted={handleTicketDeleted}
             />
           )}
         </Box>

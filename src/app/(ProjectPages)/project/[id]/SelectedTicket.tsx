@@ -1,18 +1,27 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import { Box, Button, Grid, Text, TextField } from '@radix-ui/themes';
+import mongoose from 'mongoose';
 
 import { ITicket } from '@/db/models/Ticket';
+import { IUser } from '@/db/models/User';
 
 import styles from './ticket.module.css';
+
+import { useProjectUsers } from '../../../context/ProjectUsersContext';
 
 const SelectedTicket = ({
   ticket,
   onTicketUpdated,
+  onTicketDeleted,
 }: {
   ticket: ITicket;
   onTicketUpdated: (updatedTicket: ITicket) => void;
+  onTicketDeleted: (deletedTicketId: string) => void;
 }) => {
+  const { getUsersForProject } = useProjectUsers();
+  const [users, setUsers] = useState<IUser[]>([]);
+
   const initialState = {
     id: ticket._id,
     projectId: ticket.project_id,
@@ -48,6 +57,9 @@ const SelectedTicket = ({
 
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // * Keep handleEdit from being called durring DELETE
+    if (!state.isEditing) return;
+
     try {
       const updatedTicket = {
         ...ticket,
@@ -81,26 +93,23 @@ const SelectedTicket = ({
     }
   };
 
-  const handleDelete = async (id: unknown) => {
+  const handleDelete = async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${state.projectId}/tickets`,
         {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(id),
+          body: JSON.stringify(ticket._id),
         }
       );
+
+      onTicketDeleted(ticket._id.toString());
 
       if (!response.ok) {
         const message = `Error: ${response.status}`;
         throw new Error(message);
       }
-
-      // Handle successful deletion (e.g., update UI, remove item from list)
-      console.log('Item deleted successfully');
-      // Example: Update state to remove the deleted item
-      // setData(data.filter(item => item.id !== id));
     } catch (error) {
       // Handle errors (e.g., display error message)
       console.error('There was an error deleting the item:', error);
@@ -110,6 +119,16 @@ const SelectedTicket = ({
   useEffect(() => {
     dispatch({ type: 'RESET_FORM' });
   }, [ticket]);
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      const data = await getUsersForProject(
+        state.projectId as mongoose.Schema.Types.ObjectId
+      );
+      setUsers(data as IUser[]);
+    };
+    loadUsers();
+  }, [state.projectId, getUsersForProject]);
 
   return (
     <Box className={styles.selectedTicket}>
@@ -169,8 +188,8 @@ const SelectedTicket = ({
               Assignee
             </Text>
             {state.isEditing ? (
-              <TextField.Root
-                placeholder="Assignee"
+              <select
+                name="assignee"
                 value={state.assignee}
                 onChange={(e) =>
                   dispatch({
@@ -179,7 +198,13 @@ const SelectedTicket = ({
                     value: e.target.value,
                   })
                 }
-              />
+              >
+                {users.map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
             ) : (
               <Text>{state.assignee}</Text>
             )}
@@ -259,8 +284,8 @@ const SelectedTicket = ({
               Created By
             </Text>
             {state.isEditing ? (
-              <TextField.Root
-                placeholder="Created By"
+              <select
+                name="createdBy"
                 value={state.createdBy}
                 onChange={(e) =>
                   dispatch({
@@ -269,7 +294,13 @@ const SelectedTicket = ({
                     value: e.target.value,
                   })
                 }
-              />
+              >
+                {users.map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
             ) : (
               <Text>{state.createdBy}</Text>
             )}
@@ -291,7 +322,7 @@ const SelectedTicket = ({
             />
           </label> */}
           {state.isEditing && <Button type="submit">Save Edits</Button>}
-          <Button onClick={() => handleDelete(ticket._id)}>Delete</Button>
+          <Button onClick={handleDelete}>Delete</Button>
         </form>
       </Box>
     </Box>

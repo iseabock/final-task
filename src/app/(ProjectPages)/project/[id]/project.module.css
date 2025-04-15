@@ -1,3 +1,7 @@
+.ticketsContainer {
+  height: 100%;
+}
+
 .box {
   color: white;
   padding: 20px;
