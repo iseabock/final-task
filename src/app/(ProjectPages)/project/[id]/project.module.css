@@ -23,6 +23,10 @@
   background-color: #eee;
 }
 
+.dragOver {
+  background-color: #fff;
+}
+
 /* .open {
   border-color: #ccc;
   background-color: #eee;

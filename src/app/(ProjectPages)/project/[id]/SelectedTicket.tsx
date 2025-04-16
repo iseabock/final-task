@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import { ITicket } from '@/db/models/Ticket';
 import { IUser } from '@/db/models/User';
+import { useDeleteTicket } from '@/hooks/useDeleteTicket';
 
 import styles from './ticket.module.css';
 
@@ -95,28 +96,7 @@ const SelectedTicket = ({
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${state.projectId}/tickets`,
-        {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(ticket._id),
-        }
-      );
-
-      onTicketDeleted(ticket._id.toString());
-
-      if (!response.ok) {
-        const message = `Error: ${response.status}`;
-        throw new Error(message);
-      }
-    } catch (error) {
-      // Handle errors (e.g., display error message)
-      console.error('There was an error deleting the item:', error);
-    }
-  };
+  const deleteTicket = useDeleteTicket(onTicketDeleted);
 
   useEffect(() => {
     dispatch({ type: 'RESET_FORM' });
@@ -329,8 +309,10 @@ const SelectedTicket = ({
             message="This action can not be undone"
             triggerText={<Cross1Icon />}
             confirmText="Delete"
-            onConfirm={handleDelete}
-            type="del"
+            onConfirm={() =>
+              deleteTicket(ticket._id.toString(), ticket.project_id.toString())
+            }
+            type="delete"
           />
         </form>
       </Box>

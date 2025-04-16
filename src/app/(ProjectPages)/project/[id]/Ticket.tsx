@@ -6,12 +6,16 @@ import styles from './ticket.module.css';
 
 const Ticket = ({
   ticket,
+  column,
   onClick,
   selected = false,
+  setDraggedFromColumn, // 👈 new prop
 }: {
   ticket: ITicket;
+  column: string;
   onClick: (ticket: ITicket) => void;
   selected: boolean;
+  setDraggedFromColumn: (column: string) => void; // 👈 type
 }) => {
   const handleClick = () => {
     onClick(ticket);
@@ -22,6 +26,7 @@ const Ticket = ({
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData('ticketId', ticket._id.toString());
+    setDraggedFromColumn(column);
   };
 
   return (

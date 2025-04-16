@@ -103,7 +103,7 @@ const AddTicketModal = ({
       <Modal.Trigger asChild>
         <Button>Add Ticket</Button>
       </Modal.Trigger>
-      <Modal.Content title="Add User" description="">
+      <Modal.Content title="Add Ticket" description="">
         <form onSubmit={handleSubmit}>
           <label>
             <Text as="div" size="2" mb="1" weight="bold">

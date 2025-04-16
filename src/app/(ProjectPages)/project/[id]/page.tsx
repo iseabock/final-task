@@ -15,6 +15,13 @@ import Ticket from './Ticket';
 
 const ProjectPage = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
+  const [draggingOverColumn, setDraggingOverColumn] = useState<string | null>(
+    null
+  );
+  const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(
+    null
+  );
+
   const [selectedTicket, setSelectedTicket] = useState<ITicket | undefined>();
   const params = useParams();
   const { id } = params;
@@ -102,11 +109,21 @@ const ProjectPage = () => {
           <Flex className={styles.ticketsContainer} gap="3" align="start">
             <Box
               width="33.3%"
-              className={`${styles.open}  ${styles.column}`}
-              onDragOver={(e) => e.preventDefault()}
+              className={`${styles.open} ${styles.column} ${
+                draggingOverColumn === 'open' && draggedFromColumn !== 'open'
+                  ? styles.dragOver
+                  : ''
+              }`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDraggingOverColumn('open');
+              }}
+              onDragLeave={() => setDraggingOverColumn(null)}
               onDrop={(e) => {
+                e.preventDefault();
                 const ticketId = e.dataTransfer.getData('ticketId');
                 updateTicketStatus(ticketId, 'open');
+                setDraggingOverColumn(null);
               }}
             >
               <Heading size="3" mb="2">
@@ -117,21 +134,34 @@ const ProjectPage = () => {
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
+                  column={ticket.status}
                   onClick={() => handleSelectedTicket(ticket)}
                   selected={
                     selectedTicket?._id.toString() === ticket._id.toString()
                   }
+                  setDraggedFromColumn={setDraggedFromColumn}
                 />
               ))}
             </Box>
 
             <Box
               width="33.3%"
-              className={`${styles.inProgress}  ${styles.column}`}
-              onDragOver={(e) => e.preventDefault()}
+              className={`${styles.inProgress} ${styles.column} ${
+                draggingOverColumn === 'inProgress' &&
+                draggedFromColumn !== 'inProgress'
+                  ? styles.dragOver
+                  : ''
+              }`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDraggingOverColumn('inProgress');
+              }}
+              onDragLeave={() => setDraggingOverColumn(null)}
               onDrop={(e) => {
+                e.preventDefault();
                 const ticketId = e.dataTransfer.getData('ticketId');
                 updateTicketStatus(ticketId, 'inProgress');
+                setDraggingOverColumn(null);
               }}
             >
               <Heading size="3" mb="2">
@@ -141,21 +171,34 @@ const ProjectPage = () => {
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
+                  column={ticket.status}
                   onClick={() => handleSelectedTicket(ticket)}
                   selected={
                     selectedTicket?._id.toString() === ticket._id.toString()
                   }
+                  setDraggedFromColumn={setDraggedFromColumn}
                 />
               ))}
             </Box>
 
             <Box
               width="33.3%"
-              className={`${styles.done}  ${styles.column}`}
-              onDragOver={(e) => e.preventDefault()}
+              className={`${styles.closed} ${styles.column} ${
+                draggingOverColumn === 'closed' &&
+                draggedFromColumn !== 'closed'
+                  ? styles.dragOver
+                  : ''
+              }`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDraggingOverColumn('closed');
+              }}
+              onDragLeave={() => setDraggingOverColumn(null)}
               onDrop={(e) => {
+                e.preventDefault();
                 const ticketId = e.dataTransfer.getData('ticketId');
                 updateTicketStatus(ticketId, 'closed');
+                setDraggingOverColumn(null);
               }}
             >
               <Heading size="3" mb="2">
@@ -165,10 +208,12 @@ const ProjectPage = () => {
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
+                  column={ticket.status}
                   onClick={() => handleSelectedTicket(ticket)}
                   selected={
                     selectedTicket?._id.toString() === ticket._id.toString()
                   }
+                  setDraggedFromColumn={setDraggedFromColumn}
                 />
               ))}
             </Box>

@@ -58,3 +58,14 @@
 .delete {
   background-color: red;
 }
+
+.small {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+}
+
+.small svg {
+  width: 5px;
+  height: 5px;
+}

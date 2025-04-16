@@ -11,34 +11,32 @@ interface IConfirmationDialog {
   message: string;
   confirmText: string;
   type?: string;
+  size?: string;
   onConfirm: () => void;
-  // onCancel: () => void;
 }
 
 const ConfirmationDialog = ({
-  // isOpen,
   triggerText,
   title,
   message,
   confirmText,
   type = 'delete',
+  size = 'normal',
   onConfirm,
-  // onCancel,
 }: IConfirmationDialog) => {
-  // if (!isOpen) {
-  //   return null;
-  // }
-
-  console.log('type', type);
-
   const handleDelete = () => {
     onConfirm();
   };
 
+  const triggerClass = styles[type.toLowerCase() as keyof typeof styles];
+  const sizeClass = styles[size.toLowerCase() as keyof typeof styles];
+
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button className={styles.delete}>{triggerText}</Button>
+        <Button className={`${triggerClass} ${sizeClass}`}>
+          {triggerText}
+        </Button>
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="450px">
