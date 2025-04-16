@@ -93,6 +93,10 @@ const ProjectPage = () => {
   return (
     <>
       <h1>Project Tickets</h1>
+      <AddTicketModal
+        projectId={id as string}
+        onTicketAdded={handleTicketAdded}
+      />
       <Flex className={styles.projectContainer} gap="3">
         <Box width="66.6%">
           <Flex className={styles.ticketsContainer} gap="3" align="start">
@@ -114,6 +118,9 @@ const ProjectPage = () => {
                   key={ticket._id.toString()}
                   ticket={ticket}
                   onClick={() => handleSelectedTicket(ticket)}
+                  selected={
+                    selectedTicket?._id.toString() === ticket._id.toString()
+                  }
                 />
               ))}
             </Box>
@@ -135,6 +142,9 @@ const ProjectPage = () => {
                   key={ticket._id.toString()}
                   ticket={ticket}
                   onClick={() => handleSelectedTicket(ticket)}
+                  selected={
+                    selectedTicket?._id.toString() === ticket._id.toString()
+                  }
                 />
               ))}
             </Box>
@@ -156,16 +166,15 @@ const ProjectPage = () => {
                   key={ticket._id.toString()}
                   ticket={ticket}
                   onClick={() => handleSelectedTicket(ticket)}
+                  selected={
+                    selectedTicket?._id.toString() === ticket._id.toString()
+                  }
                 />
               ))}
             </Box>
           </Flex>
         </Box>
         <Box width="33.3%" className={styles.currentTickets}>
-          <AddTicketModal
-            projectId={id as string}
-            onTicketAdded={handleTicketAdded}
-          />
           {selectedTicket && (
             <SelectedTicket
               ticket={selectedTicket}

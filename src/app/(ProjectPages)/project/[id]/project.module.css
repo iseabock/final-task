@@ -19,9 +19,11 @@
   border-style: solid;
   border-radius: 5px;
   padding: 10px;
+  border-color: #ccc;
+  background-color: #eee;
 }
 
-.open {
+/* .open {
   border-color: #ccc;
   background-color: #eee;
 }
@@ -34,7 +36,7 @@
 .done {
   border-color: #666;
   background-color: #888;
-}
+} */
 /* Tablet (2 columns) */
 @media (max-width: 1024px) {
   .box:nth-child(3) {

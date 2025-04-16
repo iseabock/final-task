@@ -1,8 +1,10 @@
 import { useEffect, useReducer, useState } from 'react';
 
+import { Cross1Icon } from '@radix-ui/react-icons';
 import { Box, Button, Grid, Text, TextField } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
+import ConfirmationDialog from '@/components/ConfirmationDialog';
 import { ITicket } from '@/db/models/Ticket';
 import { IUser } from '@/db/models/User';
 
@@ -322,7 +324,14 @@ const SelectedTicket = ({
             />
           </label> */}
           {state.isEditing && <Button type="submit">Save Edits</Button>}
-          <Button onClick={handleDelete}>Delete</Button>
+          <ConfirmationDialog
+            title="Are you sure you want to delete?"
+            message="This action can not be undone"
+            triggerText={<Cross1Icon />}
+            confirmText="Delete"
+            onConfirm={handleDelete}
+            type="del"
+          />
         </form>
       </Box>
     </Box>

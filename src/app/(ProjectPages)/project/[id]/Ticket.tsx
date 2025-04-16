@@ -7,9 +7,11 @@ import styles from './ticket.module.css';
 const Ticket = ({
   ticket,
   onClick,
+  selected = false,
 }: {
   ticket: ITicket;
   onClick: (ticket: ITicket) => void;
+  selected: boolean;
 }) => {
   const handleClick = () => {
     onClick(ticket);
@@ -26,7 +28,7 @@ const Ticket = ({
     <Box
       draggable
       onDragStart={handleDragStart}
-      className={`${styles.ticket} ${priorityClass}`}
+      className={`${styles.ticket} ${priorityClass}  ${selected && styles.selected}`}
       onClick={handleClick}
     >
       <Heading

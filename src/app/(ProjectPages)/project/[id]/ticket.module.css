@@ -41,6 +41,12 @@
   background-color: #f98f9a;
 }
 
+.selected {
+  color: #6c9bc9;
+  background-color: #fff;
+  /* filter: drop-shadow(5px 5px 2px #9999995f); */
+}
+
 /** Selected Ticket Styles */
 
 .selectedTicket {
