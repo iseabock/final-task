@@ -11,7 +11,7 @@ import { useDeleteTicket } from '@/hooks/useDeleteTicket';
 
 import styles from './ticket.module.css';
 
-import { useProjectUsers } from '../../../context/ProjectUsersContext';
+import { useProject } from '../../../context/ProjectContext';
 
 const SelectedTicket = ({
   ticket,
@@ -22,7 +22,7 @@ const SelectedTicket = ({
   onTicketUpdated: (updatedTicket: ITicket) => void;
   onTicketDeleted: (deletedTicketId: string) => void;
 }) => {
-  const { getUsersForProject } = useProjectUsers();
+  const { getUsersForProject } = useProject();
   const [users, setUsers] = useState<IUser[]>([]);
 
   const initialState = {

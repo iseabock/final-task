@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import Modal from '@/components/Modal';
 import { IUser } from '@/db/models/User';
 
-import { useProjectUsers } from '../../../context/ProjectUsersContext';
+import { useProject } from '../../../context/ProjectContext';
 
 const initialState = {
   title: '',
@@ -48,7 +48,7 @@ const AddTicketModal = ({
   onTicketAdded: () => void;
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { getUsersForProject } = useProjectUsers();
+  const { getUsersForProject } = useProject();
   const [users, setUsers] = useState<IUser[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {

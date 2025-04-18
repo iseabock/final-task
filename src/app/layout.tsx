@@ -9,7 +9,7 @@ import '@radix-ui/themes/styles.css';
 // Your global styles
 
 import Header from '../components/Header';
-import { ProjectUsersProvider } from './context/ProjectUsersContext';
+import { ProjectProvider } from './context/ProjectContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,10 +36,10 @@ export default function RootLayout({
       {/* Wrap everything inside Radix UI Theme */}
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Theme>
-          <ProjectUsersProvider>
+          <ProjectProvider>
             <Header />
             {children}
-          </ProjectUsersProvider>
+          </ProjectProvider>
         </Theme>
       </body>
     </html>

@@ -3,24 +3,29 @@
 import { useEffect, useState } from 'react';
 
 import { Box, Flex, Heading } from '@radix-ui/themes';
+import mongoose from 'mongoose';
 import { useParams } from 'next/navigation';
 
+import { IProject } from '@/db/models/Project';
 import { ITicket } from '@/db/models/Ticket';
 
 import styles from './project.module.css';
 
+import { useProject } from '../../../context/ProjectContext';
 import AddTicketModal from './AddTicketModal';
 import SelectedTicket from './SelectedTicket';
 import Ticket from './Ticket';
 
 const ProjectPage = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
+  const [project, setProject] = useState<IProject>();
   const [draggingOverColumn, setDraggingOverColumn] = useState<string | null>(
     null
   );
   const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(
     null
   );
+  const { getProject } = useProject();
 
   const [selectedTicket, setSelectedTicket] = useState<ITicket | undefined>();
   const params = useParams();
@@ -97,9 +102,19 @@ const ProjectPage = () => {
   const inProgress = tickets.filter((t) => t.status === 'inProgress');
   const closed = tickets.filter((t) => t.status === 'closed');
 
+  useEffect(() => {
+    const loadProject = async () => {
+      const data = await getProject(
+        id as unknown as mongoose.Schema.Types.ObjectId
+      );
+      setProject(data as IProject);
+    };
+    loadProject();
+  }, [id, getProject]);
+
   return (
     <>
-      <h1>Project Tickets</h1>
+      <h1>{project?.name}</h1>
       <AddTicketModal
         projectId={id as string}
         onTicketAdded={handleTicketAdded}

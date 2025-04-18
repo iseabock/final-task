@@ -6,13 +6,13 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-items: center;
-  min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--gray-1);
   font-family: var(--font-geist-sans);
 }
 
@@ -25,6 +25,27 @@
     --button-primary-hover: #ccc;
     --button-secondary-hover: #1a1a1a;
   }
+}
+
+.content {
+  text-align: center;
+  max-width: 600px;
+  padding: 2rem;
+  background-color: white;
+  border-radius: var(--radius-4);
+  box-shadow: var(--shadow-4);
+}
+
+.content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--gray-12);
+}
+
+.content p {
+  font-size: 1.1rem;
+  color: var(--gray-11);
+  margin-bottom: 2rem;
 }
 
 .main {

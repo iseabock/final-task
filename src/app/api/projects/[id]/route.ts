@@ -1,13 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import Ticket from '@/db/models/Project';
 import { connectDB } from '@/lib/mongodb';
 
 // 🟢  GET - Fetch a single project by ID
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
   await connectDB();
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const project = await Ticket.findById(id);
 
     if (!project) {
