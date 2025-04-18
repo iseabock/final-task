@@ -2,14 +2,11 @@ import { Theme } from '@radix-ui/themes';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
-// Ensure Radix UI styles are loaded
 import './globals.css';
 import '@radix-ui/themes/styles.css';
 
-// Your global styles
-
 import Header from '../components/Header';
-import { ProjectProvider } from './context/ProjectContext';
+import Providers from './context/providers';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,13 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* Wrap everything inside Radix UI Theme */}
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Theme>
-          <ProjectProvider>
+          <Providers>
             <Header />
             {children}
-          </ProjectProvider>
+          </Providers>
         </Theme>
       </body>
     </html>
