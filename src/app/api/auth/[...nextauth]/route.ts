@@ -1,32 +1,25 @@
 import NextAuth, { NextAuthOptions, User as NextAuthUser } from 'next-auth';
-import { Session } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import GithubProvider from 'next-auth/providers/github';
 
 import UserModel from '@/db/models/User';
 import { connectDB } from '@/lib/mongodb';
 
-interface UserWithRole extends NextAuthUser {
+// Define the shape of our user object
+interface User extends NextAuthUser {
   role: string;
 }
 
-interface SessionWithRole extends Session {
-  user?: {
-    id?: string;
-    name?: string | null;
-    email?: string | null;
-    role?: string;
-  };
+// Define the shape of our session user
+interface SessionUser {
+  id?: string;
+  name?: string | null;
+  email?: string | null;
+  role?: string;
 }
 
-export const authOptions: NextAuthOptions = {
-  // * Configure one or more authentication providers
+// Configure NextAuth options
+const authOptions: NextAuthOptions = {
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID ?? '',
-      clientSecret: process.env.GITHUB_SECRET ?? '',
-    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -34,60 +27,70 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email and password are required');
+        try {
+          // Validate credentials
+          if (!credentials?.email || !credentials?.password) {
+            throw new Error('Email and password are required');
+          }
+
+          // Connect to database
+          await connectDB();
+
+          // Find user by email
+          const user = await UserModel.findOne({ email: credentials.email });
+          if (!user) {
+            throw new Error('Invalid email or password');
+          }
+
+          // Verify password
+          const isValid = await user.comparePassword(credentials.password);
+          if (!isValid) {
+            throw new Error('Invalid email or password');
+          }
+
+          // Return user object (excluding sensitive data)
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error('Authentication error:', error);
+          throw error;
         }
-
-        await connectDB();
-        const user = await UserModel.findOne({ email: credentials.email });
-
-        if (!user) {
-          throw new Error('Invalid email or password');
-        }
-
-        const isPasswordValid = await user.comparePassword(
-          credentials.password
-        );
-        if (!isPasswordValid) {
-          throw new Error('Invalid email or password');
-        }
-
-        return {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
       },
     }),
   ],
   callbacks: {
+    // Add user ID and role to the JWT token
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user as UserWithRole).role;
+        token.id = user.id;
+        token.role = (user as User).role;
       }
       return token;
     },
-    async session({
-      session,
-      token,
-    }: {
-      session: SessionWithRole;
-      token: JWT & { role?: string };
-    }) {
-      if (session?.user) {
-        session.user.role = token.role;
+    // Add user ID and role to the session
+    async session({ session, token }) {
+      if (session.user) {
+        (session.user as SessionUser).id = token.id as string;
+        (session.user as SessionUser).role = token.role as string;
       }
       return session;
     },
   },
   pages: {
     signIn: '/auth',
+    error: '/auth/error',
   },
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  debug: process.env.NODE_ENV === 'development',
 };
 
+// Create and export the NextAuth handler
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

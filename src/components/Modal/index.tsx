@@ -20,6 +20,7 @@ export default function Modal({
     </Dialog.Root>
   );
 }
+
 function ModalContent({
   title,
   description,
@@ -31,18 +32,19 @@ function ModalContent({
 }) {
   return (
     <Dialog.Portal>
-      {/* Background Overlay */}
       <Dialog.Overlay className={styles.dialogOverlay} />
       <Dialog.Content className={styles.dialogContent}>
-        <Dialog.Title className="text-xl font-bold">{title}</Dialog.Title>
-        <Dialog.Description className="text-sm mb-4">
-          {description}
-        </Dialog.Description>
-        {children}
-
-        {/* Close Button */}
+        <div className={styles.header}>
+          <Dialog.Title className={styles.title}>{title}</Dialog.Title>
+          <Dialog.Description className={styles.description}>
+            {description}
+          </Dialog.Description>
+        </div>
+        <div className={styles.body}>{children}</div>
         <Dialog.Close asChild>
-          <Button className="absolute top-2 right-2">X</Button>
+          <Button variant="ghost" className={styles.closeButton}>
+            ×
+          </Button>
         </Dialog.Close>
       </Dialog.Content>
     </Dialog.Portal>

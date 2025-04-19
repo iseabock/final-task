@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 import { Button, TextField } from '@radix-ui/themes';
 import { signIn } from 'next-auth/react';
@@ -23,14 +23,15 @@ export default function AuthModal({
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       if (mode === 'login') {
-        // * Handle login
         const result = await signIn('credentials', {
           email,
           password,
@@ -41,23 +42,19 @@ export default function AuthModal({
           throw new Error(result.error);
         }
 
-        setEmail('');
-        setPassword('');
-        setName('');
-        onOpenChange(false);
-
-        router.refresh();
+        if (result?.ok) {
+          onOpenChange(false);
+          router.refresh();
+        }
       } else {
-        // * Handle signup
         const res = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, password }),
         });
 
-        const data = await res.json();
-
         if (!res.ok) {
+          const data = await res.json();
           throw new Error(data.error || 'Signup failed');
         }
 
@@ -71,15 +68,15 @@ export default function AuthModal({
           throw new Error(result.error);
         }
 
-        setEmail('');
-        setPassword('');
-        setName('');
-        onOpenChange(false);
-
-        router.refresh();
+        if (result?.ok) {
+          onOpenChange(false);
+          router.refresh();
+        }
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,40 +93,47 @@ export default function AuthModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <div className="text-red-500 text-sm">{error}</div>}
           {mode === 'signup' && (
-            <TextField.Root
-              placeholder="Full Name"
-              value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setName(e.target.value)
-              }
-              required
-            />
+            <TextField.Root>
+              <TextField.Slot>
+                <input
+                  className="w-full px-3 py-2 bg-transparent outline-none"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </TextField.Slot>
+            </TextField.Root>
           )}
           <TextField.Root
+            className="w-full px-3 py-2 bg-transparent outline-none"
             placeholder="Email"
             type="email"
             value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <TextField.Root
+            className="w-full px-3 py-2 bg-transparent outline-none"
             placeholder="Password"
             type="password"
             value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <div className="flex flex-col gap-2">
-            <Button type="submit" variant="solid">
-              {mode === 'login' ? 'Sign In' : 'Sign Up'}
+            <Button type="submit" disabled={isLoading}>
+              {isLoading
+                ? 'Loading...'
+                : mode === 'login'
+                  ? 'Sign In'
+                  : 'Sign Up'}
             </Button>
             <Button
               variant="ghost"
               onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
+              disabled={isLoading}
             >
               {mode === 'login'
                 ? "Don't have an account? Sign Up"
