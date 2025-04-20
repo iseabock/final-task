@@ -44,7 +44,7 @@ export default function AuthModal({
 
         if (result?.ok) {
           onOpenChange(false);
-          router.refresh();
+          router.push('/dashboard');
         }
       } else {
         const res = await fetch('/api/auth/signup', {

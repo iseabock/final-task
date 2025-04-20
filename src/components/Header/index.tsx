@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import { Box, Button, Flex } from '@radix-ui/themes';
 import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
 import styles from './header.module.css';
 
@@ -13,11 +12,13 @@ import AuthModal from '../../app/AuthModal';
 const Header = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { data: session, status } = useSession();
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
-    router.refresh();
+    await signOut({
+      callbackUrl: '/',
+      redirect: true,
+    });
   };
 
   return (

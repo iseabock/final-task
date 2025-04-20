@@ -1,24 +1,14 @@
-import NextAuth, { NextAuthOptions, User as NextAuthUser } from 'next-auth';
+import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import UserModel from '@/db/models/User';
+import clientPromise from '@/lib/mongodb';
 import { connectDB } from '@/lib/mongodb';
-
-// Define the shape of our user object
-interface User extends NextAuthUser {
-  role: string;
-}
-
-// Define the shape of our session user
-interface SessionUser {
-  id?: string;
-  name?: string | null;
-  email?: string | null;
-  role?: string;
-}
 
 // Configure NextAuth options
 const authOptions: NextAuthOptions = {
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -67,30 +57,42 @@ const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as User).role;
+        token.role = user.role;
       }
       return token;
     },
     // Add user ID and role to the session
     async session({ session, token }) {
-      if (session.user) {
-        (session.user as SessionUser).id = token.id as string;
-        (session.user as SessionUser).role = token.role as string;
-      }
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string,
+          role: token.role as string,
+        },
+      };
+    },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
   pages: {
     signIn: '/auth',
     error: '/auth/error',
+    signOut: '/',
   },
   session: {
     strategy: 'jwt' as const,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 // Create and export the NextAuth handler
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST, authOptions };
