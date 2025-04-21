@@ -1,57 +1,54 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { Box, Flex } from '@radix-ui/themes';
+
+import { useProjects } from '@/hooks/queries/useProjects';
 
 import styles from './projects.module.css';
 
-import { IProject } from '../../db/models/Project';
 import AddProjectModal from './AddProjectModal';
 
 const ProjectsPage = () => {
-  const [projects, setProjects] = useState<IProject[]>([]);
+  const { data: projects, isLoading, error } = useProjects();
 
-  // Fetch projects when the component mounts
-  const fetchProjects = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/projects`,
-        {
-          cache: 'no-store',
-        }
-      );
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl">Loading projects...</div>
+      </div>
+    );
+  }
 
-      if (!res.ok) {
-        throw new Error('Failed to fetch projects');
-      }
-
-      const data: IProject[] = await res.json();
-      setProjects(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl text-red-500">
+          Error: {(error as Error).message}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       <h1>Projects</h1>
       <Flex gap="3">
         <Box width="20%" className={styles.box}>
-          {/* Pass fetchProjects to refresh projects after adding a new one */}
-          <AddProjectModal fetchProjects={fetchProjects} />
+          <AddProjectModal />
         </Box>
         <Box width="60%" className={styles.box}>
           <ul>
-            {projects.map((project) => (
-              <li key={project._id}>
-                <h2>{project.name}</h2>
-                <p>{project.description}</p>
-                <small>Mode: {project.mode}</small>
+            {projects?.map((project) => (
+              <li key={project._id} className="p-4 mb-4 border rounded-lg">
+                <h2 className="text-xl font-bold">{project.name}</h2>
+                {project.description && (
+                  <p className="text-gray-600 mt-2">{project.description}</p>
+                )}
+                <div className="mt-2">
+                  <span className="inline-block px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded">
+                    Mode: {project.mode}
+                  </span>
+                </div>
               </li>
             ))}
           </ul>

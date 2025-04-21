@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { useCreateOrganization } from '@/hooks/queries/useOrganizations';
+
 import Modal from './Modal';
 
 export default function AddOrganizationModal({
@@ -17,33 +19,27 @@ export default function AddOrganizationModal({
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { mutate: createOrganization, isPending } = useCreateOrganization();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
 
-    try {
-      const res = await fetch('/api/organizations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ name, description }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Failed to create organization');
+    createOrganization(
+      { name, description },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+          router.refresh();
+        },
+        onError: (error) => {
+          setError(
+            error instanceof Error ? error.message : 'An error occurred'
+          );
+        },
       }
-
-      onOpenChange(false);
-      router.refresh();
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred');
-    } finally {
-      setIsLoading(false);
-    }
+    );
   };
 
   return (
@@ -84,16 +80,16 @@ export default function AddOrganizationModal({
               type="button"
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md hover:bg-gray-50"
               onClick={() => onOpenChange(false)}
-              disabled={isLoading}
+              disabled={isPending}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              disabled={isLoading}
+              disabled={isPending}
             >
-              {isLoading ? 'Creating...' : 'Create Organization'}
+              {isPending ? 'Creating...' : 'Create Organization'}
             </button>
           </div>
         </form>
