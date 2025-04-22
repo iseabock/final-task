@@ -7,15 +7,34 @@ import { connectDB } from '@/lib/mongodb';
 import { authOptions } from '../auth/[...nextauth]/route';
 
 // 🟢 GET - Fetch all projects
-export async function GET() {
-  await connectDB();
-
+export async function GET(req: NextRequest) {
   try {
-    const projects = await Project.find();
-    return NextResponse.json(projects, { status: 200 });
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Get organizationId from query params
+    const { searchParams } = new URL(req.url);
+    const organizationId = searchParams.get('organizationId');
+
+    if (!organizationId) {
+      return NextResponse.json(
+        { error: 'Organization ID is required' },
+        { status: 400 }
+      );
+    }
+
+    await connectDB();
+
+    const projects = await Project.find({ organizationId });
+
+    return NextResponse.json(projects);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json(
-      { error: `Failed to fetch projects: ${error}` },
+      { error: 'Failed to fetch projects' },
       { status: 500 }
     );
   }

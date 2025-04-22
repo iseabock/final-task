@@ -2,17 +2,32 @@
 
 import { Box, Flex } from '@radix-ui/themes';
 
+import AddProjectModal from '@/components/AddProjectModal';
+import { useOrganization } from '@/hooks/queries/useOrganizations';
 import { useProjects } from '@/hooks/queries/useProjects';
 
 import styles from './projects.module.css';
 
 const ProjectsPage = () => {
-  const { data: projects, isLoading, error } = useProjects('');
+  const { data: organization, isLoading: isLoadingOrg } = useOrganization();
+  const {
+    data: projects,
+    isLoading: isLoadingProjects,
+    error,
+  } = useProjects(organization?._id);
 
-  if (isLoading) {
+  if (isLoadingOrg || isLoadingProjects) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-xl">Loading projects...</div>
+      </div>
+    );
+  }
+
+  if (!organization) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl">No organization found</div>
       </div>
     );
   }
@@ -29,9 +44,11 @@ const ProjectsPage = () => {
 
   return (
     <>
-      <h1>Projects</h1>
+      <h1>Projects for {organization.name}</h1>
       <Flex gap="3">
-        <Box width="20%" className={styles.box}></Box>
+        <Box width="20%" className={styles.box}>
+          <AddProjectModal />
+        </Box>
         <Box width="60%" className={styles.box}>
           <ul>
             {projects?.map((project) => (
@@ -47,6 +64,9 @@ const ProjectsPage = () => {
                 </div>
               </li>
             ))}
+            {projects?.length === 0 && (
+              <p className="text-gray-500">No projects found</p>
+            )}
           </ul>
         </Box>
         <Box width="20%" className={styles.box}>

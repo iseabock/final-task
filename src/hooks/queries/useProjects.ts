@@ -5,10 +5,10 @@ import { api } from '@/services/api';
 interface Project {
   _id: string;
   name: string;
-  description: string;
+  description?: string;
   createdBy: string;
+  organizationId: string;
   mode: 'scrum' | 'kanban' | 'none';
-  organization_id: string;
 }
 
 interface CreateProjectData {
@@ -19,10 +19,13 @@ interface CreateProjectData {
   organization_id: string;
 }
 
-export function useProjects(organizationId: string) {
+export function useProjects(organizationId: string | undefined) {
   return useQuery<Project[]>({
     queryKey: ['projects', organizationId],
-    queryFn: () => api.projects.list(organizationId),
+    queryFn: () => {
+      if (!organizationId) throw new Error('Organization ID is required');
+      return api.projects.list(organizationId);
+    },
     enabled: !!organizationId,
   });
 }

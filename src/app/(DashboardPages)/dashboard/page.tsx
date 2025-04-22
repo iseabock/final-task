@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 
+import { Link } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 import AddOrganizationModal from '@/components/AddOrganizationModal';
 import AddProjectModal from '@/components/AddProjectModal';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
+import { useProjects } from '@/hooks/queries/useProjects';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession({
@@ -24,6 +26,12 @@ export default function DashboardPage() {
     isLoading: isLoadingOrg,
     error: orgError,
   } = useOrganization();
+
+  const {
+    data: projects,
+    // isLoading: isLoadingProjects,
+    // error: projectsError,
+  } = useProjects(organization?._id ?? '');
 
   if (status === 'loading' || isLoadingOrg) {
     return (
@@ -68,20 +76,33 @@ export default function DashboardPage() {
               Owner
             </span>
           )}
-          <AddProjectModal />
+          <div className="flex justify-end">
+            <AddProjectModal />
+          </div>
+          <div className="flex justify-end">
+            {projects?.length === 0 && (
+              <p className="text-gray-500">No projects found</p>
+            )}
+            {projects &&
+              projects?.length > 0 &&
+              projects.map((project) => (
+                <p key={project._id}>
+                  <Link href={`/project/${project._id}`}>{project.name}</Link>
+                </p>
+              ))}
+          </div>
         </div>
       ) : (
         <div className="text-center py-8">
           <p className="text-gray-600">
             You are not part of any organization. Create one to get started.
           </p>
+          <AddOrganizationModal
+            open={isAddOrgModalOpen}
+            onOpenChange={setIsAddOrgModalOpen}
+          />
         </div>
       )}
-
-      <AddOrganizationModal
-        open={isAddOrgModalOpen}
-        onOpenChange={setIsAddOrgModalOpen}
-      />
     </div>
   );
 }
