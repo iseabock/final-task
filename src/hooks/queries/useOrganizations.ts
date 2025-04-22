@@ -10,9 +10,9 @@ interface Organization {
   members: string[];
 }
 
-export function useOrganizations() {
-  return useQuery<Organization[]>({
-    queryKey: ['organizations'],
+export function useOrganization() {
+  return useQuery<Organization | null>({
+    queryKey: ['organization'],
     queryFn: api.organizations.list,
   });
 }
@@ -23,7 +23,7 @@ export function useCreateOrganization() {
   return useMutation({
     mutationFn: api.organizations.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['organizations'] });
+      queryClient.invalidateQueries({ queryKey: ['organization'] });
     },
   });
 }

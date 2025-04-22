@@ -1,7 +1,10 @@
+import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import Project from '@/db/models/Project';
 import { connectDB } from '@/lib/mongodb';
+
+import { authOptions } from '../auth/[...nextauth]/route';
 
 // 🟢 GET - Fetch all projects
 export async function GET() {
@@ -20,24 +23,37 @@ export async function GET() {
 
 // 🟠 POST - Create a new project
 export async function POST(req: NextRequest) {
-  await connectDB();
   try {
-    const { name, description, createdBy, mode } = await req.json();
+    const session = await getServerSession(authOptions);
 
-    if (!name || !createdBy) {
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { name, description, mode, organizationId } = await req.json();
+
+    if (!name || !organizationId) {
       return NextResponse.json(
-        { error: 'Name and Created By are required' },
+        { error: 'Name and organization ID are required' },
         { status: 400 }
       );
     }
 
-    const newProject = new Project({ name, description, createdBy, mode });
-    await newProject.save();
+    await connectDB();
 
-    return NextResponse.json(newProject, { status: 201 });
+    const project = await Project.create({
+      name,
+      description,
+      mode,
+      organizationId,
+      createdBy: session.user.id,
+    });
+
+    return NextResponse.json(project, { status: 201 });
   } catch (error) {
+    console.error('Error creating project:', error);
     return NextResponse.json(
-      { error: `Failed to create user: ${error}` },
+      { error: 'Failed to create project' },
       { status: 500 }
     );
   }

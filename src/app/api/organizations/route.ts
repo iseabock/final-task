@@ -17,15 +17,15 @@ export async function GET() {
 
     await connectDB();
 
-    const organizations = await Organization.find({
+    const organization = await Organization.findOne({
       $or: [{ owner: session.user.id }, { members: session.user.id }],
     });
 
-    return NextResponse.json(organizations);
+    return NextResponse.json(organization);
   } catch (error) {
-    console.error('Error fetching organizations:', error);
+    console.error('Error fetching organization:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch organizations' },
+      { error: 'Failed to fetch organization' },
       { status: 500 }
     );
   }
@@ -51,10 +51,22 @@ export async function POST(req: NextRequest) {
 
     await connectDB();
 
+    const existingOrg = await Organization.findOne({
+      $or: [{ owner: session.user.id }, { members: session.user.id }],
+    });
+
+    if (existingOrg) {
+      return NextResponse.json(
+        { error: 'User already belongs to an organization' },
+        { status: 400 }
+      );
+    }
+
     const organization = await Organization.create({
       name,
       description,
       owner: session.user.id,
+      members: [session.user.id],
     });
 
     return NextResponse.json(organization, { status: 201 });

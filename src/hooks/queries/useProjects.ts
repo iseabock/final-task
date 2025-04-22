@@ -8,6 +8,7 @@ interface Project {
   description: string;
   createdBy: string;
   mode: 'scrum' | 'kanban' | 'none';
+  organization_id: string;
 }
 
 interface CreateProjectData {
@@ -15,20 +16,25 @@ interface CreateProjectData {
   description: string;
   createdBy: string;
   mode: 'scrum' | 'kanban' | 'none';
+  organization_id: string;
 }
 
-export function useProjects() {
+export function useProjects(organizationId: string) {
   return useQuery<Project[]>({
-    queryKey: ['projects'],
-    queryFn: api.projects.list,
+    queryKey: ['projects', organizationId],
+    queryFn: () => api.projects.list(organizationId),
+    enabled: !!organizationId,
   });
 }
 
 export function useCreateProject() {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (data: CreateProjectData) => api.projects.create(data),
+    mutationFn: (data: CreateProjectData) =>
+      api.projects.create({
+        ...data,
+        organizationId: data.organization_id,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },

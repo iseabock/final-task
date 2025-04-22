@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Button, Text, TextField } from '@radix-ui/themes';
 
 import Modal from '@/components/Modal';
+import { useOrganization } from '@/hooks/queries/useOrganizations';
 import { useCreateProject } from '@/hooks/queries/useProjects';
 
 // Define the form data type
@@ -12,22 +13,26 @@ interface ProjectFormData {
   name: string;
   description: string;
   mode: 'scrum' | 'kanban' | 'none';
+  organization_id: string;
 }
 
 const initialFormData: ProjectFormData = {
   name: '',
   description: '',
   mode: 'none',
+  organization_id: '',
 };
 
 const AddProjectModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<ProjectFormData>(initialFormData);
   const { mutate: createProject, isPending, error } = useCreateProject();
-
   const resetForm = () => {
     setFormData(initialFormData);
   };
+  const { data: organization } = useOrganization();
+
+  console.log('organization :', organization);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +40,7 @@ const AddProjectModal = () => {
     createProject(
       {
         ...formData,
+        organization_id: organization?._id?.toString() || '',
         createdBy: 'current-user-id', // TODO: Get this from auth context
       },
       {

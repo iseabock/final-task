@@ -5,7 +5,7 @@ export const api = {
   organizations: {
     list: async () => {
       const res = await fetch(`${BASE_URL}/api/organizations`);
-      if (!res.ok) throw new Error('Failed to fetch organizations');
+      if (!res.ok) throw new Error('Failed to fetch organization');
       return res.json();
     },
     create: async (data: { name: string; description?: string }) => {
@@ -15,16 +15,22 @@ export const api = {
         credentials: 'include',
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error('Failed to create organization');
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to create organization');
+      }
       return res.json();
     },
   },
   // * Projects endpoints
   projects: {
-    list: async () => {
-      const res = await fetch(`${BASE_URL}/api/projects`, {
-        cache: 'no-store',
-      });
+    list: async (organizationId: string) => {
+      const res = await fetch(
+        `${BASE_URL}/api/projects?organizationId=${organizationId}`,
+        {
+          cache: 'no-store',
+        }
+      );
       if (!res.ok) throw new Error('Failed to fetch projects');
       return res.json();
     },
@@ -38,6 +44,7 @@ export const api = {
       description?: string;
       createdBy: string;
       mode: 'scrum' | 'kanban' | 'none';
+      organizationId: string;
     }) => {
       const res = await fetch(`${BASE_URL}/api/projects`, {
         method: 'POST',

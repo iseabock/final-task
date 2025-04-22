@@ -6,10 +6,8 @@ import { useProjects } from '@/hooks/queries/useProjects';
 
 import styles from './projects.module.css';
 
-import AddProjectModal from './AddProjectModal';
-
 const ProjectsPage = () => {
-  const { data: projects, isLoading, error } = useProjects();
+  const { data: projects, isLoading, error } = useProjects('');
 
   if (isLoading) {
     return (
@@ -33,9 +31,7 @@ const ProjectsPage = () => {
     <>
       <h1>Projects</h1>
       <Flex gap="3">
-        <Box width="20%" className={styles.box}>
-          <AddProjectModal />
-        </Box>
+        <Box width="20%" className={styles.box}></Box>
         <Box width="60%" className={styles.box}>
           <ul>
             {projects?.map((project) => (
