@@ -36,18 +36,16 @@ export default function DashboardPage() {
 
   if (status === 'loading' || isLoadingOrg) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl">Loading...</div>
+      <div>
+        <div>Loading...</div>
       </div>
     );
   }
 
   if (orgError) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl text-red-500">
-          Error: {(orgError as Error).message}
-        </div>
+      <div>
+        <div>Error: {(orgError as Error).message}</div>
       </div>
     );
   }

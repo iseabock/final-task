@@ -33,6 +33,7 @@ const SelectedTicket = ({
     status: ticket.status,
     priority: ticket.priority,
     points: ticket.points,
+    type: ticket.type,
     assignee: ticket.assignee,
     createdBy: ticket.created_by,
     createdAt: ticket.created_at,
@@ -71,6 +72,7 @@ const SelectedTicket = ({
         status: state.status,
         priority: state.priority,
         points: state.points,
+        type: state.type,
         assignee: state.assignee,
         created_by: state.createdBy,
         created_at: state.createdAt,
@@ -287,22 +289,6 @@ const SelectedTicket = ({
               <Text>{state.createdBy}</Text>
             )}
           </label>
-          {/* <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Created At
-            </Text>
-            <TextField.Root
-              placeholder="Created At"
-              value={state.createdAt}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'createdAt',
-                  value: e.target.value,
-                })
-              }
-            />
-          </label> */}
           {state.isEditing && <Button type="submit">Save Edits</Button>}
           <ConfirmationDialog
             title="Are you sure you want to delete?"

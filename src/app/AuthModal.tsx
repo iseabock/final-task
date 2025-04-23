@@ -90,13 +90,12 @@ export default function AuthModal({
             : 'Create a new account to get started'
         }
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <div className="text-red-500 text-sm">{error}</div>}
+        <form onSubmit={handleSubmit}>
+          {error && <div>{error}</div>}
           {mode === 'signup' && (
             <TextField.Root>
               <TextField.Slot>
                 <input
-                  className="w-full px-3 py-2 bg-transparent outline-none"
                   placeholder="Full Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -106,7 +105,6 @@ export default function AuthModal({
             </TextField.Root>
           )}
           <TextField.Root
-            className="w-full px-3 py-2 bg-transparent outline-none"
             placeholder="Email"
             type="email"
             value={email}
@@ -115,14 +113,13 @@ export default function AuthModal({
           />
 
           <TextField.Root
-            className="w-full px-3 py-2 bg-transparent outline-none"
             placeholder="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <div className="flex flex-col gap-2">
+          <div>
             <Button type="submit" disabled={isLoading}>
               {isLoading
                 ? 'Loading...'

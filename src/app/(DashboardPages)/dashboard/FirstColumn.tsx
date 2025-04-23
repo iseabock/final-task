@@ -46,8 +46,8 @@ export default function FirstColumn({
               )}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-600">
+            <div>
+              <p>
                 You are not part of any organization. Create one to get started.
               </p>
               <AddOrganizationModal

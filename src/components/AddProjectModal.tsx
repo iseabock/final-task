@@ -67,14 +67,14 @@ const AddProjectModal = () => {
         title="Create New Project"
         description="Create a new project to organize your work"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit}>
           {error && (
-            <div className="text-red-500 text-sm">
+            <div>
               {error instanceof Error ? error.message : 'An error occurred'}
             </div>
           )}
 
-          <div className="space-y-2">
+          <div>
             <Text as="label" size="2" weight="bold">
               Project Name
             </Text>
@@ -91,7 +91,7 @@ const AddProjectModal = () => {
             />
           </div>
 
-          <div className="space-y-2">
+          <div>
             <Text as="label" size="2" weight="bold">
               Description
             </Text>
@@ -107,12 +107,11 @@ const AddProjectModal = () => {
             />
           </div>
 
-          <div className="space-y-2">
+          <div>
             <Text as="label" size="2" weight="bold">
               Project Mode
             </Text>
             <select
-              className="w-full px-3 py-2 border rounded-md"
               value={formData.mode}
               onChange={(e) =>
                 setFormData((prev) => ({
@@ -127,7 +126,7 @@ const AddProjectModal = () => {
             </select>
           </div>
 
-          <div className="flex justify-end gap-2 mt-4">
+          <div>
             <Button
               type="button"
               variant="soft"
