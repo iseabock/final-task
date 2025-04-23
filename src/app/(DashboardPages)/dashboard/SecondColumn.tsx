@@ -28,7 +28,7 @@ const SecondColumn = ({ projects }: { projects: IProject[] }) => {
               <Table.ColumnHeaderCell>Tickets</Table.ColumnHeaderCell>
             </Table.Row>
           </Table.Header>
-          <Table.Body>
+          <Table.Body className={styles.projectCard}>
             {projects?.length === 0 && <p>No projects found</p>}
             {projects &&
               projects?.length > 0 &&

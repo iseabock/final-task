@@ -7,3 +7,9 @@
   display: flex;
   justify-content: flex-end;
 }
+
+/* * Project Card */
+
+.projectCard span {
+  margin-left: 10px;
+}
