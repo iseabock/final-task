@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 
-import { Button, TextField } from '@radix-ui/themes';
+import { TextField } from '@radix-ui/themes';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 import Modal from '@/components/Modal';
+import { Button } from '@/components/ui/Button/Button';
 
 type AuthMode = 'login' | 'signup';
 
@@ -128,7 +129,7 @@ export default function AuthModal({
                   : 'Sign Up'}
             </Button>
             <Button
-              variant="ghost"
+              variant="soft"
               onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
               disabled={isLoading}
             >

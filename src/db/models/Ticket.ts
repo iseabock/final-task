@@ -10,6 +10,7 @@ export interface ITicket extends Document {
   points?: number;
   // assignee?: mongoose.Schema.Types.ObjectId;
   // created_by: mongoose.Schema.Types.ObjectId;
+  type: 'bug' | 'feature';
   assignee?: string;
   created_by: string;
   created_at?: Date;
@@ -36,6 +37,11 @@ const ticketSchema = new Schema<ITicket>({
   points: { type: String, default: 0 },
   // assignee: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   assignee: { type: String, ref: 'User' },
+  type: {
+    type: String,
+    enum: ['bug', 'feature'],
+    default: 'feature',
+  },
   created_by: {
     // type: mongoose.Schema.Types.ObjectId,
     type: String,

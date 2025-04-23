@@ -10,6 +10,7 @@ interface Ticket {
   status?: string;
   priority?: string;
   points?: number;
+  type?: string;
   createdBy: string;
   assignee: string;
   mode: 'scrum' | 'kanban' | 'none';
@@ -22,6 +23,7 @@ interface CreateTicketData {
   status: string;
   priority: string;
   points: number;
+  type: string;
   assignee: string;
   projectId: mongoose.Types.ObjectId;
 }
@@ -45,6 +47,7 @@ export function useCreateTicket() {
         ...data,
         status: data.status as 'open' | 'inProgress' | 'closed',
         priority: data.priority as 'low' | 'medium' | 'high' | 'critical',
+        type: data.type as 'bug' | 'feature',
       };
       return api.projects.tickets.create(data.projectId.toString(), ticketData);
     },

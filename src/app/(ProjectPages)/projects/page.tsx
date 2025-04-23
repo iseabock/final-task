@@ -18,26 +18,24 @@ const ProjectsPage = () => {
 
   if (isLoadingOrg || isLoadingProjects) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl">Loading projects...</div>
+      <div>
+        <div>Loading projects...</div>
       </div>
     );
   }
 
   if (!organization) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl">No organization found</div>
+      <div>
+        <div>No organization found</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl text-red-500">
-          Error: {(error as Error).message}
-        </div>
+      <div>
+        <div>Error: {(error as Error).message}</div>
       </div>
     );
   }
@@ -52,21 +50,15 @@ const ProjectsPage = () => {
         <Box width="60%" className={styles.box}>
           <ul>
             {projects?.map((project) => (
-              <li key={project._id} className="p-4 mb-4 border rounded-lg">
-                <h2 className="text-xl font-bold">{project.name}</h2>
-                {project.description && (
-                  <p className="text-gray-600 mt-2">{project.description}</p>
-                )}
-                <div className="mt-2">
-                  <span className="inline-block px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded">
-                    Mode: {project.mode}
-                  </span>
+              <li key={project._id}>
+                <h2>{project.name}</h2>
+                {project.description && <p>{project.description}</p>}
+                <div>
+                  <span>Mode: {project.mode}</span>
                 </div>
               </li>
             ))}
-            {projects?.length === 0 && (
-              <p className="text-gray-500">No projects found</p>
-            )}
+            {projects?.length === 0 && <p>No projects found</p>}
           </ul>
         </Box>
         <Box width="20%" className={styles.box}>

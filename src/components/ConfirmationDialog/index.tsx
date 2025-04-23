@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Dialog, Flex } from '@radix-ui/themes';
+import { Button, Dialog, Flex, IconButton } from '@radix-ui/themes';
 
 import styles from './confirmationDialog.module.css';
 
@@ -34,9 +34,15 @@ const ConfirmationDialog = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button className={`${triggerClass} ${sizeClass}`}>
-          {triggerText}
-        </Button>
+        {type === 'delete' ? (
+          <IconButton className={`${triggerClass} ${sizeClass}`}>
+            {triggerText}
+          </IconButton>
+        ) : (
+          <Button className={`${triggerClass} ${sizeClass}`}>
+            {triggerText}
+          </Button>
+        )}
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="450px">

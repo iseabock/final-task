@@ -1,0 +1,9 @@
+.current-projects {
+  width: 100%;
+}
+
+.addProjectModal {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}

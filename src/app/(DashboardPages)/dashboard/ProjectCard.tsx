@@ -1,4 +1,4 @@
-import { Badge, Box, Flex, Link } from '@radix-ui/themes';
+import { Badge, Flex, Link, Table } from '@radix-ui/themes';
 
 import { IProject } from '@/db/models/Project';
 import { useTickets } from '@/hooks/queries/useTickets';
@@ -18,14 +18,18 @@ const ProjectCard = ({ project }: { project: IProject }) => {
   const closedTickets = tickets?.filter((ticket) => ticket.status === 'closed');
 
   return (
-    <Box key={project._id}>
-      <Link href={`/project/${project._id}`}>{project.name}</Link>
-      <Flex>
-        <Badge color="green">{openTickets?.length} open</Badge>
-        <Badge color="yellow">{inProgressTickets?.length} in progress</Badge>
-        <Badge color="red">{closedTickets?.length} closed</Badge>
-      </Flex>
-    </Box>
+    <>
+      <Table.RowHeaderCell>
+        <Link href={`/project/${project._id}`}>{project.name}</Link>
+      </Table.RowHeaderCell>
+      <Table.Cell>
+        <Flex>
+          <Badge color="green">{openTickets?.length} open</Badge>
+          <Badge color="yellow">{inProgressTickets?.length} in progress</Badge>
+          <Badge color="red">{closedTickets?.length} closed</Badge>
+        </Flex>
+      </Table.Cell>
+    </>
   );
 };
 

@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
 
 import * as Dialog from '@radix-ui/react-dialog';
-import { Button } from '@radix-ui/themes';
+import { Cross1Icon } from '@radix-ui/react-icons';
+
+import { Button } from '@/components/ui/Button/Button';
 
 import styles from './modal.module.css';
 
@@ -42,8 +44,8 @@ function ModalContent({
         </div>
         <div className={styles.body}>{children}</div>
         <Dialog.Close asChild>
-          <Button variant="ghost" className={styles.closeButton}>
-            ×
+          <Button variant="soft" className={styles.closeButton}>
+            <Cross1Icon />
           </Button>
         </Dialog.Close>
       </Dialog.Content>

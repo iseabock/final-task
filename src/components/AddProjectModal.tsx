@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 
-import { Button, Text, TextField } from '@radix-ui/themes';
+import { Text, TextField } from '@radix-ui/themes';
 
 import Modal from '@/components/Modal';
+import { Button } from '@/components/ui/Button/Button';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
 import { useCreateProject } from '@/hooks/queries/useProjects';
 

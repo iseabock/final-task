@@ -2,10 +2,11 @@
 
 import { useEffect, useReducer, useState } from 'react';
 
-import { Button, Text, TextField } from '@radix-ui/themes';
+import { Text, TextField } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
 import Modal from '@/components/Modal';
+import { Button } from '@/components/ui/Button/Button';
 import { IUser } from '@/db/models/User';
 
 import { useProject } from '../../../context/ProjectContext';
@@ -16,6 +17,7 @@ const initialState = {
   status: 'open',
   priority: 'medium',
   points: '0',
+  type: 'feature',
   assignee: '',
   createdBy: '',
   createdAt: '',
@@ -174,6 +176,24 @@ const AddTicketModal = ({
               <option value="medium">Medium</option>
               <option value="high">High</option>
               <option value="critical">Critical</option>
+            </select>
+          </label>
+          <label>
+            <Text as="div" size="2" mb="1" weight="bold">
+              Type
+            </Text>
+            <select
+              value={state.type}
+              onChange={(e) =>
+                dispatch({
+                  type: 'SET_FIELD',
+                  field: 'type',
+                  value: e.target.value,
+                })
+              }
+            >
+              <option value="feature">Feature</option>
+              <option value="bug">Bug</option>
             </select>
           </label>
           <label>

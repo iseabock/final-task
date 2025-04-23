@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 
-import { Box, Button, Flex } from '@radix-ui/themes';
+import { Box, Flex } from '@radix-ui/themes';
 import { signOut, useSession } from 'next-auth/react';
+
+import { Button } from '@/components/ui/Button/Button';
 
 import styles from './header.module.css';
 

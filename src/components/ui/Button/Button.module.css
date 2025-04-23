@@ -1,0 +1,135 @@
+.button {
+  /* Base styles using Radix design tokens */
+  font-family: var(--font-family);
+  border-radius: var(--radius-2);
+  transition: all 200ms ease;
+  font-weight: 500;
+}
+
+/* Blue variant */
+.blue.solid {
+  background-color: rgb(112, 168, 228);
+  color: white;
+}
+
+.blue.solid:hover {
+  background-color: rgb(59, 139, 225);
+}
+
+.blue.soft {
+  background-color: rgb(230, 241, 255);
+  color: rgb(0, 122, 255);
+}
+
+.blue.soft:hover {
+  background-color: rgb(220, 235, 255);
+}
+
+.blue.outline {
+  border: 1px solid rgb(59, 139, 225);
+  color: rgb(112, 168, 228);
+  background: transparent;
+}
+
+.blue.outline:hover {
+  background-color: rgb(230, 241, 255);
+}
+
+/* Green variant */
+.green.solid {
+  background-color: rgb(52, 199, 89);
+  color: white;
+}
+
+.green.solid:hover {
+  background-color: rgb(42, 179, 79);
+}
+
+.green.soft {
+  background-color: rgb(236, 247, 238);
+  color: rgb(52, 199, 89);
+}
+
+.green.soft:hover {
+  background-color: rgb(226, 242, 229);
+}
+
+.green.outline {
+  border: 1px solid rgb(52, 199, 89);
+  color: rgb(52, 199, 89);
+  background: transparent;
+}
+
+.green.outline:hover {
+  background-color: rgb(236, 247, 238);
+}
+
+/* Red variant */
+.red.solid {
+  background-color: rgb(255, 59, 48);
+  color: white;
+}
+
+.red.solid:hover {
+  background-color: rgb(215, 49, 38);
+}
+
+.red.soft {
+  background-color: rgb(255, 235, 234);
+  color: rgb(255, 59, 48);
+}
+
+.red.soft:hover {
+  background-color: rgb(255, 225, 224);
+}
+
+.red.outline {
+  border: 1px solid rgb(255, 59, 48);
+  color: rgb(255, 59, 48);
+  background: transparent;
+}
+
+.red.outline:hover {
+  background-color: rgb(255, 235, 234);
+}
+
+/* Purple variant */
+.purple.solid {
+  background-color: rgb(175, 82, 222);
+  color: white;
+}
+
+.purple.solid:hover {
+  background-color: rgb(155, 62, 202);
+}
+
+.purple.soft {
+  background-color: rgb(245, 235, 250);
+  color: rgb(175, 82, 222);
+}
+
+.purple.soft:hover {
+  background-color: rgb(240, 225, 245);
+}
+
+.purple.outline {
+  border: 1px solid rgb(175, 82, 222);
+  color: rgb(175, 82, 222);
+  background: transparent;
+}
+
+.purple.outline:hover {
+  background-color: rgb(245, 235, 250);
+}
+
+/* Disabled state for all variants */
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus state for all variants */
+.button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}

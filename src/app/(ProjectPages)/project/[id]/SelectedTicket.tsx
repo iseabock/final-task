@@ -1,10 +1,11 @@
 import { useEffect, useReducer, useState } from 'react';
 
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { Box, Button, Grid, Text, TextField } from '@radix-ui/themes';
+import { Box, Grid, Text, TextField } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
 import ConfirmationDialog from '@/components/ConfirmationDialog';
+import { Button } from '@/components/ui/Button/Button';
 import { ITicket } from '@/db/models/Ticket';
 import { IUser } from '@/db/models/User';
 import { useDeleteTicket } from '@/hooks/useDeleteTicket';

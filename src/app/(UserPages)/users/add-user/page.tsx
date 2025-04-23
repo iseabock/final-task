@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 
-import { Button, TextField } from '@radix-ui/themes';
+import { TextField } from '@radix-ui/themes';
+
+import { Button } from '@/components/ui/Button/Button';
 
 const UserPage = () => {
   const [name, setName] = useState('');
