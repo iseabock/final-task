@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
-import { Box, Flex, Heading } from '@radix-ui/themes';
+import { Box, Flex, Heading, Link } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 import { useParams } from 'next/navigation';
 
 import { IProject } from '@/db/models/Project';
 import { ITicket } from '@/db/models/Ticket';
+import { useOrganization } from '@/hooks/queries/useOrganizations';
 
 import styles from './project.module.css';
 
@@ -26,6 +27,11 @@ const ProjectPage = () => {
     null
   );
   const { getProject } = useProject();
+  const {
+    data: organization,
+    // isLoading: isLoadingOrg,
+    // error: orgError,
+  } = useOrganization();
 
   const [selectedTicket, setSelectedTicket] = useState<ITicket | undefined>();
   const params = useParams();
@@ -115,6 +121,9 @@ const ProjectPage = () => {
   return (
     <>
       <h1>{project?.name}</h1>
+      <h2>
+        <Link href="/dashboard">{organization?.name}</Link>
+      </h2>
       <AddTicketModal
         projectId={id as string}
         onTicketAdded={handleTicketAdded}

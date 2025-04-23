@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-
-import { Link } from '@radix-ui/themes';
+import { Box, Flex } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-import AddOrganizationModal from '@/components/AddOrganizationModal';
-import AddProjectModal from '@/components/AddProjectModal';
+import { IOrganization } from '@/db/models/Organization';
+import { IProject } from '@/db/models/Project';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
 import { useProjects } from '@/hooks/queries/useProjects';
+
+import FirstColumn from './FirstColumn';
+import SecondColumn from './SecondColumn';
+import ThirdColumn from './ThirdColumn';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession({
@@ -19,7 +21,6 @@ export default function DashboardPage() {
     },
   });
   const router = useRouter();
-  const [isAddOrgModalOpen, setIsAddOrgModalOpen] = useState(false);
 
   const {
     data: organization,
@@ -52,57 +53,17 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        {!organization && (
-          <button
-            onClick={() => setIsAddOrgModalOpen(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Create Organization
-          </button>
-        )}
-      </div>
+    <Box style={{ padding: '10px' }}>
+      <Flex align="start" gap="6">
+        <FirstColumn
+          session={session}
+          organization={organization as unknown as IOrganization}
+        />
 
-      {organization ? (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold">{organization.name}</h2>
-          {organization.description && (
-            <p className="text-gray-600 mt-2">{organization.description}</p>
-          )}
-          {organization.owner === session?.user?.id && (
-            <span className="inline-block mt-2 px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded">
-              Owner
-            </span>
-          )}
-          <div className="flex justify-end">
-            <AddProjectModal />
-          </div>
-          <div className="flex justify-end">
-            {projects?.length === 0 && (
-              <p className="text-gray-500">No projects found</p>
-            )}
-            {projects &&
-              projects?.length > 0 &&
-              projects.map((project) => (
-                <p key={project._id}>
-                  <Link href={`/project/${project._id}`}>{project.name}</Link>
-                </p>
-              ))}
-          </div>
-        </div>
-      ) : (
-        <div className="text-center py-8">
-          <p className="text-gray-600">
-            You are not part of any organization. Create one to get started.
-          </p>
-          <AddOrganizationModal
-            open={isAddOrgModalOpen}
-            onOpenChange={setIsAddOrgModalOpen}
-          />
-        </div>
-      )}
-    </div>
+        <SecondColumn projects={projects as IProject[]} />
+
+        <ThirdColumn />
+      </Flex>
+    </Box>
   );
 }
