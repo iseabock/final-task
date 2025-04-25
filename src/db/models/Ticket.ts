@@ -8,11 +8,9 @@ export interface ITicket extends Document {
   status: 'open' | 'inProgress' | 'closed';
   priority: 'low' | 'medium' | 'high' | 'critical';
   points?: number;
-  // assignee?: mongoose.Schema.Types.ObjectId;
-  // created_by: mongoose.Schema.Types.ObjectId;
-  type: 'bug' | 'feature';
-  assignee?: string;
-  created_by: string;
+  type: 'bug' | 'feature' | 'task';
+  assignee: mongoose.Schema.Types.ObjectId;
+  created_by: mongoose.Schema.Types.ObjectId;
   created_at?: Date;
 }
 
@@ -35,21 +33,18 @@ const ticketSchema = new Schema<ITicket>({
     default: 'medium',
   },
   points: { type: String, default: 0 },
-  // assignee: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  assignee: { type: String, ref: 'User' },
+  assignee: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   type: {
     type: String,
     enum: ['bug', 'feature'],
     default: 'feature',
   },
   created_by: {
-    // type: mongoose.Schema.Types.ObjectId,
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    // required: true,
+    required: true,
   },
-  // created_at: { type: Date, default: Date.now },
-  created_at: { type: String, default: 'Date.now' },
+  created_at: { type: Date, default: 'Date.now' },
 });
 
 const Ticket =

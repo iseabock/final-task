@@ -70,8 +70,6 @@ const AddTicketModal = ({
             points: state.points,
             type: state.type,
             assignee: state.assignee,
-            createdBy: state.createdBy,
-            createdAt: state.createdAt,
           }),
         }
       );
@@ -95,6 +93,7 @@ const AddTicketModal = ({
       );
       setUsers(data as IUser[]);
     };
+
     loadUsers();
   }, [projectId, getUsersForProject]);
 
@@ -195,6 +194,7 @@ const AddTicketModal = ({
             >
               <option value="feature">Feature</option>
               <option value="bug">Bug</option>
+              <option value="task">Task</option>
             </select>
           </label>
           <label>
@@ -230,50 +230,12 @@ const AddTicketModal = ({
             >
               {users?.map((user) => {
                 return (
-                  <option key={user._id} value={user._id}>
+                  <option key={user._id.toString()} value={user._id.toString()}>
                     {user.name}
                   </option>
                 );
               })}
             </select>
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Created By
-            </Text>
-            <select
-              name="createdBy"
-              value={state.createdBy}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'createdBy',
-                  value: e.target.value,
-                })
-              }
-            >
-              {users.map((user) => (
-                <option key={user._id} value={user._id}>
-                  {user.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Created At
-            </Text>
-            <TextField.Root
-              placeholder="Created At"
-              value={state.createdAt}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'createdAt',
-                  value: e.target.value,
-                })
-              }
-            />
           </label>
           <Button type="submit">Add Ticket</Button>
         </form>

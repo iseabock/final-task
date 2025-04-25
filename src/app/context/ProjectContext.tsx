@@ -14,7 +14,6 @@ type Project = {
   id: string;
   name: string;
   description?: string;
-  // add other fields as needed
 };
 
 type ProjectContextType = {
@@ -44,11 +43,20 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const key = projectId.toString();
     if (usersByProject[key]) return usersByProject[key];
 
-    const res = await fetch(`/api/projects/${key}/users`);
-    const data: User[] = await res.json();
-
-    setUsersByProject((prev) => ({ ...prev, [key]: data }));
-    return data;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${key}/users`
+      );
+      if (!res.ok) {
+        throw new Error(`Failed to fetch users: ${res.statusText}`);
+      }
+      const data: User[] = await res.json();
+      setUsersByProject((prev) => ({ ...prev, [key]: data }));
+      return data;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return [];
+    }
   };
 
   const getProject = async (

@@ -58,7 +58,7 @@ export default function DashboardPage() {
           organization={organization as unknown as IOrganization}
         />
 
-        <SecondColumn projects={projects as IProject[]} />
+        <SecondColumn projects={projects as unknown as IProject[]} />
 
         <ThirdColumn />
       </Flex>

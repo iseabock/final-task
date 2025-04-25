@@ -1,9 +1,12 @@
 import { Types } from 'mongoose';
 import mongoose from 'mongoose';
+import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import Ticket from '@/db/models/Ticket';
 import { connectDB } from '@/lib/mongodb';
+
+import { authOptions } from '../../../auth/[...nextauth]/route';
 
 // 🟢 GET - Fetch a single project by ID
 export async function GET(
@@ -35,20 +38,15 @@ export async function POST(
   context: { params: { id: string } }
 ) {
   await connectDB();
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const { id } = await context.params;
 
-    const {
-      title,
-      description,
-      status,
-      priority,
-      points,
-      type,
-      assignee,
-      createdBy,
-      createdAt,
-    } = await req.json();
+    const { title, description, status, priority, points, type, assignee } =
+      await req.json();
 
     const newTicket = new Ticket({
       project_id: new Types.ObjectId(id),
@@ -59,8 +57,8 @@ export async function POST(
       points,
       type,
       assignee,
-      created_by: createdBy,
-      created_at: createdAt ? new Date(createdAt) : new Date(),
+      created_by: new Types.ObjectId(session.user.id),
+      created_at: new Date(),
     });
 
     await newTicket.save();

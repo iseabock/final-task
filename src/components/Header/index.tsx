@@ -36,7 +36,7 @@ const Header = () => {
             </>
           ) : (
             <Button
-              size="3"
+              size="md"
               variant="solid"
               onClick={() => setIsAuthModalOpen(true)}
             >

@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 
 import { IProject } from '@/db/models/Project';
 import { ITicket } from '@/db/models/Ticket';
+import { IUser } from '@/db/models/User';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
 
 import styles from './project.module.css';
@@ -20,13 +21,14 @@ import Ticket from './Ticket';
 const ProjectPage = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
   const [project, setProject] = useState<IProject>();
+  const [users, setUsers] = useState<IUser[]>([]);
   const [draggingOverColumn, setDraggingOverColumn] = useState<string | null>(
     null
   );
   const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(
     null
   );
-  const { getProject } = useProject();
+  const { getProject, getUsersForProject } = useProject();
   const {
     data: organization,
     // isLoading: isLoadingOrg,
@@ -118,6 +120,17 @@ const ProjectPage = () => {
     loadProject();
   }, [id, getProject]);
 
+  useEffect(() => {
+    const loadUsers = async () => {
+      const users = await getUsersForProject(
+        id as unknown as mongoose.Schema.Types.ObjectId
+      );
+      setUsers(users as IUser[]);
+      console.log('Users:', users);
+    };
+    loadUsers();
+  }, [id, getUsersForProject]);
+
   return (
     <Box className={styles.projectContainer}>
       <Flex justify="between">
@@ -164,6 +177,12 @@ const ProjectPage = () => {
                 <Ticket
                   key={ticket._id.toString()}
                   ticket={ticket}
+                  assignee={
+                    users.find(
+                      (user) =>
+                        user._id.toString() === ticket.assignee?.toString()
+                    )?.name
+                  }
                   column={ticket.status}
                   onClick={() => handleSelectedTicket(ticket)}
                   selected={

@@ -1,19 +1,19 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IProject extends Document {
-  _id: string;
+  _id: mongoose.Schema.Types.ObjectId;
   name: string;
   description: string;
-  createdBy: string;
-  organizationId: string;
+  createdBy: mongoose.Schema.Types.ObjectId;
+  organizationId: mongoose.Schema.Types.ObjectId;
   mode: 'scrum' | 'kanban' | 'none';
 }
 
 const ProjectSchema = new Schema<IProject>({
   name: { type: String, required: true },
   description: { type: String, required: false },
-  createdBy: { type: String, required: true },
-  organizationId: { type: String, required: true },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
+  organizationId: { type: mongoose.Schema.Types.ObjectId, required: true },
   mode: { type: String, enum: ['scrum', 'kanban', 'none'], default: 'none' },
 });
 

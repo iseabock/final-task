@@ -64,6 +64,7 @@ const SelectedTicket = ({
     e.preventDefault();
     // * Keep handleEdit from being called durring DELETE
     if (!state.isEditing) return;
+    // console.log('handleEdit');
 
     try {
       const updatedTicket = {
@@ -115,6 +116,8 @@ const SelectedTicket = ({
     loadUsers();
   }, [state.projectId, getUsersForProject]);
 
+  console.log('state.isEditing', state.isEditing);
+
   return (
     <Box className={styles.selectedTicket}>
       <Box>
@@ -137,7 +140,7 @@ const SelectedTicket = ({
               />
             </label>
           ) : (
-            <Text size="4" mb="1" weight="bold">
+            <Text as="div" size="4" mb="1" weight="bold">
               {state.title}
             </Text>
           )}
@@ -168,7 +171,7 @@ const SelectedTicket = ({
             {state.isEditing ? (
               <select
                 name="assignee"
-                value={state.assignee}
+                value={state.assignee?.toString()}
                 onChange={(e) =>
                   dispatch({
                     type: 'SET_FIELD',
@@ -178,13 +181,20 @@ const SelectedTicket = ({
                 }
               >
                 {users.map((user) => (
-                  <option key={user._id} value={user._id}>
+                  <option key={user._id.toString()} value={user._id.toString()}>
                     {user.name}
                   </option>
                 ))}
               </select>
             ) : (
-              <Text>{state.assignee}</Text>
+              <Text>
+                {
+                  users.find(
+                    (user) =>
+                      user._id.toString() === ticket.assignee?.toString()
+                  )?.name
+                }
+              </Text>
             )}
           </label>
           <Grid columns="3" gap="3" rows="repeat(2, 64px)" width="auto">
@@ -261,27 +271,15 @@ const SelectedTicket = ({
             <Text as="div" size="2" mb="1" weight="bold">
               Created By
             </Text>
-            {state.isEditing ? (
-              <select
-                name="createdBy"
-                value={state.createdBy}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'SET_FIELD',
-                    field: 'createdBy',
-                    value: e.target.value,
-                  })
-                }
-              >
-                {users.map((user) => (
-                  <option key={user._id} value={user._id}>
-                    {user.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <Text>{state.createdBy}</Text>
-            )}
+
+            <Text>
+              {
+                users.find(
+                  (user) =>
+                    user._id.toString() === ticket.created_by?.toString()
+                )?.name
+              }
+            </Text>
           </label>
           {state.isEditing && <Button type="submit">Save Edits</Button>}
           <ConfirmationDialog
@@ -294,15 +292,16 @@ const SelectedTicket = ({
             }
             type="delete"
           />
-          <Button
-            size="sm"
-            onClick={() =>
-              dispatch({ type: 'EDITING_MODE', isEditing: !state.isEditing })
-            }
-          >
-            Edit
-          </Button>
         </form>
+        <Button
+          size="sm"
+          type="button"
+          onClick={() =>
+            dispatch({ type: 'EDITING_MODE', isEditing: !state.isEditing })
+          }
+        >
+          {state.isEditing ? 'Cancel' : 'Edit'}
+        </Button>
       </Box>
     </Box>
   );

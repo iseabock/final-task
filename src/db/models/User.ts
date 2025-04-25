@@ -2,11 +2,12 @@ import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 
 export interface IUser extends mongoose.Document {
-  _id: string;
+  _id: mongoose.Schema.Types.ObjectId;
   name: string;
   email: string;
   password: string;
   role: 'admin' | 'developer' | 'qa';
+  organization_id: mongoose.Schema.Types.ObjectId;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -18,6 +19,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['admin', 'developer', 'qa'],
     default: 'developer',
+  },
+  organization_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Organization',
+    required: true,
   },
 });
 

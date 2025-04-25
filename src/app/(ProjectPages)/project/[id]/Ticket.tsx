@@ -8,12 +8,14 @@ import styles from './ticket.module.css';
 const Ticket = ({
   ticket,
   column,
+  assignee,
   onClick,
   selected = false,
   setDraggedFromColumn,
 }: {
   ticket: ITicket;
   column: string;
+  assignee?: string;
   onClick: (ticket: ITicket) => void;
   selected: boolean;
   setDraggedFromColumn: (column: string) => void;
@@ -59,9 +61,7 @@ const Ticket = ({
       </Text>
       <div className={styles.ticketMeta}>
         <strong>{ticket.points}pts</strong>
-        <span>
-          {ticket.assignee ? `Assignee: ${ticket.assignee}` : 'Unassigned'}
-        </span>
+        <span>{assignee ? assignee : 'Unassigned'}</span>
       </div>
     </Box>
   );
