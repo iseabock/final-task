@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { Button, Dialog, Flex, IconButton } from '@radix-ui/themes';
+import { Dialog, Flex } from '@radix-ui/themes';
 
 import styles from './confirmationDialog.module.css';
+
+import { Button } from '../ui/Button/Button';
 
 interface IConfirmationDialog {
   // isOpen: boolean;
@@ -35,9 +37,14 @@ const ConfirmationDialog = ({
     <Dialog.Root>
       <Dialog.Trigger>
         {type === 'delete' ? (
-          <IconButton className={`${triggerClass} ${sizeClass}`}>
+          <Button
+            size="sm"
+            variant="solid"
+            color="red"
+            className={`${triggerClass} ${sizeClass}`}
+          >
             {triggerText}
-          </IconButton>
+          </Button>
         ) : (
           <Button className={`${triggerClass} ${sizeClass}`}>
             {triggerText}
@@ -52,9 +59,7 @@ const ConfirmationDialog = ({
         </Dialog.Description>
         <Flex gap="3" mt="4" justify="end">
           <Dialog.Close>
-            <Button variant="soft" color="gray">
-              Cancel
-            </Button>
+            <Button variant="soft">Cancel</Button>
           </Dialog.Close>
           <Dialog.Close>
             <Button onClick={handleDelete}>{confirmText}</Button>

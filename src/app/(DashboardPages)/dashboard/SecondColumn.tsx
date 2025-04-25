@@ -26,6 +26,8 @@ const SecondColumn = ({ projects }: { projects: IProject[] }) => {
             <Table.Row>
               <Table.ColumnHeaderCell>Project</Table.ColumnHeaderCell>
               <Table.ColumnHeaderCell>Tickets</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell />
+              <Table.ColumnHeaderCell />
             </Table.Row>
           </Table.Header>
           <Table.Body className={styles.projectCard}>

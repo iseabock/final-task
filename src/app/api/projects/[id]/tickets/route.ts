@@ -44,6 +44,7 @@ export async function POST(
       status,
       priority,
       points,
+      type,
       assignee,
       createdBy,
       createdAt,
@@ -56,7 +57,7 @@ export async function POST(
       status,
       priority,
       points,
-      // assignee: assignee ? new Types.ObjectId(assignee) : undefined,
+      type,
       assignee,
       created_by: createdBy,
       created_at: createdAt ? new Date(createdAt) : new Date(),
@@ -76,8 +77,16 @@ export async function PUT(req: NextRequest) {
   await connectDB();
   try {
     const body = await req.json();
-    const { _id, title, description, status, priority, points, assignee } =
-      body;
+    const {
+      _id,
+      title,
+      description,
+      status,
+      priority,
+      points,
+      assignee,
+      type,
+    } = body;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return NextResponse.json({ error: 'Invalid Ticket ID' }, { status: 400 });
@@ -92,7 +101,7 @@ export async function PUT(req: NextRequest) {
 
     const updatedTicket = await Ticket.findByIdAndUpdate(
       _id,
-      { title, description, status, priority, points, assignee },
+      { title, description, status, priority, points, assignee, type },
       { new: true }
     );
 

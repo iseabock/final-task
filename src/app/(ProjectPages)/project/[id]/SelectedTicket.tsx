@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from 'react';
 
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { Box, Grid, Text, TextField } from '@radix-ui/themes';
+import { Box, Grid, Text, TextArea, TextField } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
 import ConfirmationDialog from '@/components/ConfirmationDialog';
@@ -117,13 +117,6 @@ const SelectedTicket = ({
 
   return (
     <Box className={styles.selectedTicket}>
-      <Button
-        onClick={() =>
-          dispatch({ type: 'EDITING_MODE', isEditing: !state.isEditing })
-        }
-      >
-        Edit
-      </Button>
       <Box>
         <form onSubmit={handleEdit}>
           {state.isEditing ? (
@@ -153,7 +146,7 @@ const SelectedTicket = ({
               <Text as="div" size="2" mb="1" weight="bold">
                 Description
               </Text>
-              <TextField.Root
+              <TextArea
                 placeholder="Description"
                 value={state.description}
                 onChange={(e) =>
@@ -301,6 +294,14 @@ const SelectedTicket = ({
             }
             type="delete"
           />
+          <Button
+            size="sm"
+            onClick={() =>
+              dispatch({ type: 'EDITING_MODE', isEditing: !state.isEditing })
+            }
+          >
+            Edit
+          </Button>
         </form>
       </Box>
     </Box>

@@ -119,16 +119,16 @@ const ProjectPage = () => {
   }, [id, getProject]);
 
   return (
-    <>
-      <h1>{project?.name}</h1>
-      <h2>
-        <Link href="/dashboard">{organization?.name}</Link>
-      </h2>
-      <AddTicketModal
-        projectId={id as string}
-        onTicketAdded={handleTicketAdded}
-      />
-      <Flex className={styles.projectContainer} gap="3">
+    <Box className={styles.projectContainer}>
+      <Flex justify="between">
+        <Box>
+          <h1>
+            <Link href="/dashboard">{organization?.name}</Link>
+          </h1>
+          <h2>{project?.name}</h2>
+        </Box>
+      </Flex>
+      <Flex gap="3">
         <Box width="66.6%">
           <Flex className={styles.ticketsContainer} gap="3" align="start">
             <Box
@@ -150,9 +150,15 @@ const ProjectPage = () => {
                 setDraggingOverColumn(null);
               }}
             >
-              <Heading size="3" mb="2">
-                Open
-              </Heading>
+              <Flex justify="between">
+                <Heading size="3" mb="2">
+                  Open
+                </Heading>
+                <AddTicketModal
+                  projectId={id as string}
+                  onTicketAdded={handleTicketAdded}
+                />
+              </Flex>
 
               {open?.map((ticket) => (
                 <Ticket
@@ -260,7 +266,7 @@ const ProjectPage = () => {
           )}
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 

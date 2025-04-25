@@ -1,4 +1,5 @@
 import { Box, Heading, Text } from '@radix-ui/themes';
+import { Bug } from 'lucide-react';
 
 import { ITicket } from '@/db/models/Ticket';
 
@@ -9,13 +10,13 @@ const Ticket = ({
   column,
   onClick,
   selected = false,
-  setDraggedFromColumn, // 👈 new prop
+  setDraggedFromColumn,
 }: {
   ticket: ITicket;
   column: string;
   onClick: (ticket: ITicket) => void;
   selected: boolean;
-  setDraggedFromColumn: (column: string) => void; // 👈 type
+  setDraggedFromColumn: (column: string) => void;
 }) => {
   const handleClick = () => {
     onClick(ticket);
@@ -23,6 +24,7 @@ const Ticket = ({
 
   const priorityClass =
     styles[ticket.priority.toLowerCase() as keyof typeof styles];
+  const typeClass = styles[ticket.type.toLowerCase() as keyof typeof styles];
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData('ticketId', ticket._id.toString());
@@ -33,7 +35,7 @@ const Ticket = ({
     <Box
       draggable
       onDragStart={handleDragStart}
-      className={`${styles.ticket} ${priorityClass}  ${selected && styles.selected}`}
+      className={`${styles.ticket} ${priorityClass} ${typeClass} ${selected && styles.selected}`}
       onClick={handleClick}
     >
       <Heading
@@ -43,6 +45,7 @@ const Ticket = ({
         as="h3"
         truncate
       >
+        {ticket.type === 'bug' && <Bug size={14} className={styles.bugIcon} />}{' '}
         {ticket.title}
       </Heading>
       <Text
@@ -54,30 +57,12 @@ const Ticket = ({
       >
         {ticket.description}
       </Text>
-      <Box>
-        <label>
-          Points:
-          <Text size="1" weight="bold" truncate={true}>
-            {ticket.points}
-          </Text>
-        </label>
-      </Box>
-      <Box>
-        <label>
-          Assigned to:
-          <Text size="1" weight="bold" truncate={true}>
-            {ticket.assignee}
-          </Text>
-        </label>
-      </Box>
-      <Box>
-        <label>
-          Created by:
-          <Text size="1" weight="bold" truncate={true}>
-            {ticket.created_by}
-          </Text>
-        </label>
-      </Box>
+      <div className={styles.ticketMeta}>
+        <strong>{ticket.points}pts</strong>
+        <span>
+          {ticket.assignee ? `Assignee: ${ticket.assignee}` : 'Unassigned'}
+        </span>
+      </div>
     </Box>
   );
 };

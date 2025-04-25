@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useState } from 'react';
 
-import { Text, TextField } from '@radix-ui/themes';
+import { Text, TextArea, TextField } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
 import Modal from '@/components/Modal';
@@ -68,6 +68,7 @@ const AddTicketModal = ({
             status: state.status,
             priority: state.priority,
             points: state.points,
+            type: state.type,
             assignee: state.assignee,
             createdBy: state.createdBy,
             createdAt: state.createdAt,
@@ -103,7 +104,7 @@ const AddTicketModal = ({
       onOpenChange={(isOpen) => dispatch({ type: 'TOGGLE_MODAL', isOpen })}
     >
       <Modal.Trigger asChild>
-        <Button>Add Ticket</Button>
+        <Button size="sm">Add Ticket</Button>
       </Modal.Trigger>
       <Modal.Content title="Add Ticket" description="">
         <form onSubmit={handleSubmit}>
@@ -127,7 +128,7 @@ const AddTicketModal = ({
             <Text as="div" size="2" mb="1" weight="bold">
               Description
             </Text>
-            <TextField.Root
+            <TextArea
               placeholder="Description"
               value={state.description}
               onChange={(e) =>
