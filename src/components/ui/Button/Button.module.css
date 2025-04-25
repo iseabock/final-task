@@ -1,9 +1,42 @@
 .button {
   /* Base styles using Radix design tokens */
-  font-family: var(--font-family);
-  border-radius: var(--radius-2);
-  transition: all 200ms ease;
-  font-weight: 500;
+  font-family: var(--font-family) !important;
+  border-radius: var(--radius-2) !important;
+  transition: all 200ms ease !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important; /* Space between icon and text if needed */
+}
+
+/* Size variations */
+.sm {
+  height: 24px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+}
+
+.md {
+  height: 32px !important;
+  padding: 0 12px !important;
+  font-size: 14px !important;
+  border-radius: 6px !important;
+}
+
+.lg {
+  height: 40px !important;
+  padding: 0 16px !important;
+  font-size: 15px !important;
+  border-radius: 8px !important;
+}
+
+.xl {
+  height: 48px !important;
+  padding: 0 20px !important;
+  font-size: 16px !important;
+  border-radius: 10px !important;
 }
 
 /* Blue variant */
@@ -66,21 +99,21 @@
 
 /* Red variant */
 .red.solid {
-  background-color: rgb(255, 59, 48);
+  background-color: rgb(183, 40, 32);
   color: white;
 }
 
 .red.solid:hover {
-  background-color: rgb(215, 49, 38);
+  background-color: rgb(155, 32, 26);
 }
 
 .red.soft {
-  background-color: rgb(255, 235, 234);
-  color: rgb(255, 59, 48);
+  background-color: rgb(183, 93, 88);
+  color: rgb(214, 103, 97);
 }
 
 .red.soft:hover {
-  background-color: rgb(255, 225, 224);
+  background-color: rgb(183, 93, 88);
 }
 
 .red.outline {
@@ -132,4 +165,25 @@
 .button:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
+}
+
+/* Optional: Adjust icon sizes based on button size */
+.sm svg {
+  width: 14px;
+  height: 14px;
+}
+
+.md svg {
+  width: 18px;
+  height: 18px;
+}
+
+.lg svg {
+  width: 20px;
+  height: 20px;
+}
+
+.xl svg {
+  width: 24px;
+  height: 24px;
 }
