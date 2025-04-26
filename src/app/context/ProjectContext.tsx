@@ -66,7 +66,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     if (projects[key]) return projects[key];
 
     const res = await fetch(`/api/projects/${key}`);
-    console.log('res :', res);
     if (!res.ok) return null;
 
     const data: Project = await res.json();

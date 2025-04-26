@@ -3,8 +3,6 @@ import { useCallback } from 'react';
 export const useDeleteTicket = (onTicketDeleted: (id: string) => void) => {
   return useCallback(
     async (ticketId: string, projectId: string) => {
-      console.log('projectId :', projectId);
-      console.log('ticketId :', ticketId);
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}/tickets`,

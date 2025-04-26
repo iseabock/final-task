@@ -21,26 +21,29 @@ const SecondColumn = ({ projects }: { projects: IProject[] }) => {
         <Heading as="h3" size="6" trim="start" mb="5">
           Current Projects
         </Heading>
-        <Table.Root>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeaderCell>Project</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Tickets</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell />
-              <Table.ColumnHeaderCell />
-            </Table.Row>
-          </Table.Header>
-          <Table.Body className={styles.projectCard}>
-            {projects?.length === 0 && <p>No projects found</p>}
-            {projects &&
-              projects?.length > 0 &&
-              projects.map((project) => (
-                <Table.Row key={project._id}>
-                  <ProjectCard project={project as IProject} />
-                </Table.Row>
-              ))}
-          </Table.Body>
-        </Table.Root>
+        {projects?.length === 0 ? (
+          <p>No projects found</p>
+        ) : (
+          <Table.Root>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>Project</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Tickets</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell />
+                <Table.ColumnHeaderCell />
+              </Table.Row>
+            </Table.Header>
+            <Table.Body className={styles.projectCard}>
+              {projects &&
+                projects?.length > 0 &&
+                projects.map((project) => (
+                  <Table.Row key={project._id.toString()}>
+                    <ProjectCard project={project as IProject} />
+                  </Table.Row>
+                ))}
+            </Table.Body>
+          </Table.Root>
+        )}
         <Box className={styles.addProjectModal}>
           <AddProjectModal />
         </Box>

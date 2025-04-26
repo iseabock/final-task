@@ -56,7 +56,7 @@ export async function POST(
       priority,
       points,
       type,
-      assignee,
+      assignee: assignee ? new Types.ObjectId(assignee) : null,
       created_by: new Types.ObjectId(session.user.id),
       created_at: new Date(),
     });

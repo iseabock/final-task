@@ -11,7 +11,7 @@ const ThirdColumn = () => {
     >
       <Card size="4">
         <Heading as="h3" size="6" trim="start" mb="5">
-          Something else
+          List users and their roles and tickets
         </Heading>
       </Card>
     </Flex>

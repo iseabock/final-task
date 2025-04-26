@@ -126,7 +126,6 @@ const ProjectPage = () => {
         id as unknown as mongoose.Schema.Types.ObjectId
       );
       setUsers(users as IUser[]);
-      console.log('Users:', users);
     };
     loadUsers();
   }, [id, getUsersForProject]);

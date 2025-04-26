@@ -33,7 +33,11 @@ const ticketSchema = new Schema<ITicket>({
     default: 'medium',
   },
   points: { type: String, default: 0 },
-  assignee: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  assignee: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  },
   type: {
     type: String,
     enum: ['bug', 'feature'],
@@ -44,7 +48,7 @@ const ticketSchema = new Schema<ITicket>({
     ref: 'User',
     required: true,
   },
-  created_at: { type: Date, default: 'Date.now' },
+  created_at: { type: Date, default: Date.now },
 });
 
 const Ticket =

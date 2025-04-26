@@ -19,12 +19,12 @@ interface Ticket {
 interface CreateTicketData {
   title: string;
   description: string;
-  createdBy: string;
+  createdBy: mongoose.Types.ObjectId;
   status: string;
   priority: string;
   points: number;
   type: string;
-  assignee: string;
+  assignee: mongoose.Types.ObjectId;
   projectId: mongoose.Types.ObjectId;
 }
 
@@ -49,7 +49,10 @@ export function useCreateTicket() {
         priority: data.priority as 'low' | 'medium' | 'high' | 'critical',
         type: data.type as 'bug' | 'feature',
       };
-      return api.projects.tickets.create(data.projectId.toString(), ticketData);
+      return api.projects.tickets.create(data.projectId.toString(), {
+        ...ticketData,
+        assignee: ticketData.assignee.toString(),
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tickets'] });

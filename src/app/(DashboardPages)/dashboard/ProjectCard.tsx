@@ -9,7 +9,7 @@ const ProjectCard = ({ project }: { project: IProject }) => {
 
     // isLoading: isLoadingTickets,
     // error: ticketsError,
-  } = useTickets(project._id ?? '');
+  } = useTickets(project.id);
 
   const openTickets = tickets?.filter((ticket) => ticket.status === 'open');
   const inProgressTickets = tickets?.filter(

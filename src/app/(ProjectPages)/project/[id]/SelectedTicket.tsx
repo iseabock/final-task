@@ -64,7 +64,6 @@ const SelectedTicket = ({
     e.preventDefault();
     // * Keep handleEdit from being called durring DELETE
     if (!state.isEditing) return;
-    // console.log('handleEdit');
 
     try {
       const updatedTicket = {
@@ -115,8 +114,6 @@ const SelectedTicket = ({
     };
     loadUsers();
   }, [state.projectId, getUsersForProject]);
-
-  console.log('state.isEditing', state.isEditing);
 
   return (
     <Box className={styles.selectedTicket}>

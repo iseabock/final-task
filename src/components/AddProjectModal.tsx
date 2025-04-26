@@ -33,8 +33,6 @@ const AddProjectModal = () => {
   };
   const { data: organization } = useOrganization();
 
-  console.log('organization :', organization);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -59,7 +57,7 @@ const AddProjectModal = () => {
   return (
     <Modal open={isOpen} onOpenChange={setIsOpen}>
       <Modal.Trigger asChild>
-        <Button size="3" variant="solid">
+        <Button size="md" variant="solid">
           Add Project
         </Button>
       </Modal.Trigger>
