@@ -15,6 +15,7 @@ interface IConfirmationDialog {
   type?: string;
   size?: string;
   onConfirm: () => void;
+  className?: string;
 }
 
 const ConfirmationDialog = ({
@@ -25,6 +26,7 @@ const ConfirmationDialog = ({
   type = 'delete',
   size = 'normal',
   onConfirm,
+  className,
 }: IConfirmationDialog) => {
   const handleDelete = () => {
     onConfirm();
@@ -41,7 +43,7 @@ const ConfirmationDialog = ({
             size="sm"
             variant="solid"
             color="red"
-            className={`${triggerClass} ${sizeClass}`}
+            className={`${triggerClass} ${sizeClass} ${className}`}
           >
             {triggerText}
           </Button>

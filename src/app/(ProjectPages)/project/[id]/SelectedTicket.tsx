@@ -3,6 +3,7 @@ import { useEffect, useReducer, useState } from 'react';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import {
   Box,
+  Flex,
   Grid,
   Select as RadixSelect,
   Text,
@@ -176,6 +177,8 @@ const SelectedTicket = ({
             {state.isEditing ? (
               <Select
                 value={state.assignee?.toString()}
+                size="sm"
+                color="gray"
                 onValueChange={(value) =>
                   dispatch({
                     type: 'SET_FIELD',
@@ -212,6 +215,8 @@ const SelectedTicket = ({
               {state.isEditing ? (
                 <Select
                   value={state.status}
+                  size="sm"
+                  color="gray"
                   onValueChange={(value) =>
                     dispatch({
                       type: 'SET_FIELD',
@@ -237,6 +242,8 @@ const SelectedTicket = ({
               {state.isEditing ? (
                 <Select
                   value={state.priority}
+                  size="sm"
+                  color="gray"
                   onValueChange={(value) =>
                     dispatch({
                       type: 'SET_FIELD',
@@ -290,27 +297,35 @@ const SelectedTicket = ({
               }
             </Text>
           </label>
-          {state.isEditing && <Button type="submit">Save Edits</Button>}
-          <ConfirmationDialog
-            title="Are you sure you want to delete?"
-            message="This action can not be undone"
-            triggerText={<Cross1Icon />}
-            confirmText="Delete"
-            onConfirm={() =>
-              deleteTicket(ticket._id.toString(), ticket.project_id.toString())
-            }
-            type="delete"
-          />
+          <Flex gap="4" justify="between" align="center" width="30%">
+            {state.isEditing && (
+              <Button size="sm" type="submit">
+                Save Edits
+              </Button>
+            )}
+
+            <Button
+              size="sm"
+              type="button"
+              onClick={() =>
+                dispatch({ type: 'EDITING_MODE', isEditing: !state.isEditing })
+              }
+            >
+              {state.isEditing ? 'Cancel' : 'Edit'}
+            </Button>
+          </Flex>
         </form>
-        <Button
-          size="sm"
-          type="button"
-          onClick={() =>
-            dispatch({ type: 'EDITING_MODE', isEditing: !state.isEditing })
+        <ConfirmationDialog
+          title="Are you sure you want to delete?"
+          message="This action can not be undone"
+          triggerText={<Cross1Icon />}
+          confirmText="Delete"
+          className={styles.deleteButton}
+          onConfirm={() =>
+            deleteTicket(ticket._id.toString(), ticket.project_id.toString())
           }
-        >
-          {state.isEditing ? 'Cancel' : 'Edit'}
-        </Button>
+          type="delete"
+        />
       </Box>
     </Box>
   );
