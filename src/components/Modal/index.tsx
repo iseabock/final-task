@@ -43,11 +43,13 @@ function ModalContent({
           </Dialog.Description>
         </div>
         <div className={styles.body}>{children}</div>
-        <Dialog.Close asChild>
-          <Button variant="soft" className={styles.closeButton}>
-            <Cross1Icon />
-          </Button>
-        </Dialog.Close>
+        <div className={styles.closeButtonContainer}>
+          <Dialog.Close asChild>
+            <Button variant="soft">
+              <Cross1Icon />
+            </Button>
+          </Dialog.Close>
+        </div>
       </Dialog.Content>
     </Dialog.Portal>
   );
@@ -55,26 +57,3 @@ function ModalContent({
 
 Modal.Trigger = Dialog.Trigger;
 Modal.Content = ModalContent;
-
-// {/* Button to Open Dialog */}
-// <Dialog.Trigger asChild>
-// <Button variant="solid">Add User</Button>
-// </Dialog.Trigger>
-
-// {/* Dialog Modal */}
-// <Dialog.Portal>
-// {/* Background Overlay */}
-// <Dialog.Overlay className="dialog-overlay" />
-// <Dialog.Content className="dialog-content">
-
-//     <Dialog.Title className="text-xl font-bold">Add New User</Dialog.Title>
-//     <Dialog.Description className="text-sm mb-4">
-//         Enter user details below.
-//     </Dialog.Description>
-
-//     {/* Close Button */}
-//     <Dialog.Close asChild>
-//         <Button className="absolute top-2 right-2">X</Button>
-//     </Dialog.Close>
-// </Dialog.Content>
-// </Dialog.Portal>

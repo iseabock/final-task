@@ -2,12 +2,22 @@
 
 import { useEffect, useReducer, useState } from 'react';
 
-import { Text, TextArea, TextField } from '@radix-ui/themes';
+import {
+  Box,
+  Flex,
+  Select as RadixSelect,
+  Text,
+  TextArea,
+  TextField,
+} from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/Button/Button';
+import { Select } from '@/components/ui/Select/Select';
 import { IUser } from '@/db/models/User';
+
+import styles from './addTicketModal.module.css';
 
 import { useProject } from '../../../context/ProjectContext';
 
@@ -18,7 +28,7 @@ const initialState = {
   priority: 'medium',
   points: '0',
   type: 'feature',
-  assignee: '',
+  assignee: 'Unassigned',
   createdBy: '',
   createdAt: '',
   isOpen: false,
@@ -107,137 +117,171 @@ const AddTicketModal = ({
       </Modal.Trigger>
       <Modal.Content title="Add Ticket" description="">
         <form onSubmit={handleSubmit}>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Title
-            </Text>
-            <TextField.Root
-              placeholder="Title"
-              value={state.title}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'title',
-                  value: e.target.value,
-                })
-              }
-            />
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Description
-            </Text>
-            <TextArea
-              placeholder="Description"
-              value={state.description}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'description',
-                  value: e.target.value,
-                })
-              }
-            />
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Status
-            </Text>
-            <select
-              value={state.status}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'status',
-                  value: e.target.value,
-                })
-              }
-            >
-              <option value="open">Open</option>
-              <option value="inProgress">In Progress</option>
-              <option value="closed">Closed</option>
-            </select>
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Priority
-            </Text>
-            <select
-              value={state.priority}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'priority',
-                  value: e.target.value,
-                })
-              }
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Type
-            </Text>
-            <select
-              value={state.type}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'type',
-                  value: e.target.value,
-                })
-              }
-            >
-              <option value="feature">Feature</option>
-              <option value="bug">Bug</option>
-              <option value="task">Task</option>
-            </select>
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Points
-            </Text>
-            <TextField.Root
-              placeholder="Points"
-              value={state.points}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'points',
-                  value: e.target.value,
-                })
-              }
-            />
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Assignee
-            </Text>
-            <select
-              name="assignee"
-              value={state.assignee}
-              onChange={(e) =>
-                dispatch({
-                  type: 'SET_FIELD',
-                  field: 'assignee',
-                  value: e.target.value,
-                })
-              }
-            >
-              {users?.map((user) => {
-                return (
-                  <option key={user._id.toString()} value={user._id.toString()}>
-                    {user.name}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-          <Button type="submit">Add Ticket</Button>
+          <Box className={styles.inputSection}>
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Title
+              </Text>
+              <TextField.Root
+                placeholder="Add a title that describes the ticket"
+                value={state.title}
+                radius="large"
+                size="3"
+                onChange={(e) =>
+                  dispatch({
+                    type: 'SET_FIELD',
+                    field: 'title',
+                    value: e.target.value,
+                  })
+                }
+              />
+            </label>
+          </Box>
+          <Box className={styles.inputSection}>
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Description
+              </Text>
+              <TextArea
+                placeholder="Add a description that give more context to the ticket"
+                value={state.description}
+                onChange={(e) =>
+                  dispatch({
+                    type: 'SET_FIELD',
+                    field: 'description',
+                    value: e.target.value,
+                  })
+                }
+              />
+            </label>
+          </Box>
+          <Box className={styles.inputSection}>
+            <Flex gap="4" justify="between" align="center">
+              <label>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Status
+                </Text>
+                <Select
+                  value={state.status}
+                  size="sm"
+                  color="gray"
+                  className={styles.statusSelect}
+                  onValueChange={(value) =>
+                    dispatch({
+                      type: 'SET_FIELD',
+                      field: 'status',
+                      value,
+                    })
+                  }
+                >
+                  <RadixSelect.Item value="open">Open</RadixSelect.Item>
+                  <RadixSelect.Item value="inProgress">
+                    In Progress
+                  </RadixSelect.Item>
+                  <RadixSelect.Item value="closed">Closed</RadixSelect.Item>
+                </Select>
+              </label>
+
+              <label>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Priority
+                </Text>
+                <Select
+                  value={state.priority}
+                  size="sm"
+                  color="gray"
+                  className={styles.prioritySelect}
+                  onValueChange={(value) =>
+                    dispatch({
+                      type: 'SET_FIELD',
+                      field: 'priority',
+                      value,
+                    })
+                  }
+                >
+                  <RadixSelect.Item value="low">Low</RadixSelect.Item>
+                  <RadixSelect.Item value="medium">Medium</RadixSelect.Item>
+                  <RadixSelect.Item value="high">High</RadixSelect.Item>
+                  <RadixSelect.Item value="critical">Critical</RadixSelect.Item>
+                </Select>
+              </label>
+              <label>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Type
+                </Text>
+                <Select
+                  value={state.type}
+                  size="sm"
+                  color="gray"
+                  className={styles.typeSelect}
+                  onValueChange={(value) =>
+                    dispatch({
+                      type: 'SET_FIELD',
+                      field: 'type',
+                      value,
+                    })
+                  }
+                >
+                  <RadixSelect.Item value="feature">Feature</RadixSelect.Item>
+                  <RadixSelect.Item value="bug">Bug</RadixSelect.Item>
+                  <RadixSelect.Item value="task">Task</RadixSelect.Item>
+                </Select>
+              </label>
+            </Flex>
+          </Box>
+          <Box className={styles.inputSection}>
+            <Flex gap="4" justify="between" align="center">
+              <label>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Points
+                </Text>
+                <TextField.Root
+                  placeholder="Points"
+                  value={state.points}
+                  onChange={(e) =>
+                    dispatch({
+                      type: 'SET_FIELD',
+                      field: 'points',
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </label>
+              <label>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Assignee
+                </Text>
+                <Select
+                  value={state.assignee}
+                  size="sm"
+                  color="gray"
+                  className={styles.assigneeSelect}
+                  onValueChange={(value) =>
+                    dispatch({
+                      type: 'SET_FIELD',
+                      field: 'assignee',
+                      value,
+                    })
+                  }
+                >
+                  <RadixSelect.Item key="unassigned" value="unassigned">
+                    Unassigned
+                  </RadixSelect.Item>
+                  {users?.map((user) => (
+                    <RadixSelect.Item
+                      key={user._id.toString()}
+                      value={user._id.toString()}
+                    >
+                      {user.name}
+                    </RadixSelect.Item>
+                  ))}
+                </Select>
+              </label>
+            </Flex>
+          </Box>
+          <Box className={styles.inputSection}>
+            <Button type="submit">Add Ticket</Button>
+          </Box>
         </form>
       </Modal.Content>
     </Modal>

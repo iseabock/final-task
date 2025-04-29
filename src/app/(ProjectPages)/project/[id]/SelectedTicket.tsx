@@ -1,11 +1,19 @@
 import { useEffect, useReducer, useState } from 'react';
 
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { Box, Grid, Text, TextArea, TextField } from '@radix-ui/themes';
+import {
+  Box,
+  Grid,
+  Select as RadixSelect,
+  Text,
+  TextArea,
+  TextField,
+} from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import { Button } from '@/components/ui/Button/Button';
+import { Select } from '@/components/ui/Select/Select';
 import { ITicket } from '@/db/models/Ticket';
 import { IUser } from '@/db/models/User';
 import { useDeleteTicket } from '@/hooks/useDeleteTicket';
@@ -166,23 +174,25 @@ const SelectedTicket = ({
               Assignee
             </Text>
             {state.isEditing ? (
-              <select
-                name="assignee"
+              <Select
                 value={state.assignee?.toString()}
-                onChange={(e) =>
+                onValueChange={(value) =>
                   dispatch({
                     type: 'SET_FIELD',
                     field: 'assignee',
-                    value: e.target.value,
+                    value,
                   })
                 }
               >
                 {users.map((user) => (
-                  <option key={user._id.toString()} value={user._id.toString()}>
+                  <RadixSelect.Item
+                    key={user._id.toString()}
+                    value={user._id.toString()}
+                  >
                     {user.name}
-                  </option>
+                  </RadixSelect.Item>
                 ))}
-              </select>
+              </Select>
             ) : (
               <Text>
                 {
@@ -200,20 +210,22 @@ const SelectedTicket = ({
                 Status
               </Text>
               {state.isEditing ? (
-                <select
+                <Select
                   value={state.status}
-                  onChange={(e) =>
+                  onValueChange={(value) =>
                     dispatch({
                       type: 'SET_FIELD',
                       field: 'status',
-                      value: e.target.value,
+                      value,
                     })
                   }
                 >
-                  <option value="open">Open</option>
-                  <option value="inProgress">In Progress</option>
-                  <option value="closed">Closed</option>
-                </select>
+                  <RadixSelect.Item value="open">Open</RadixSelect.Item>
+                  <RadixSelect.Item value="inProgress">
+                    In Progress
+                  </RadixSelect.Item>
+                  <RadixSelect.Item value="closed">Closed</RadixSelect.Item>
+                </Select>
               ) : (
                 <Text>{state.status}</Text>
               )}
@@ -223,21 +235,21 @@ const SelectedTicket = ({
                 Priority
               </Text>
               {state.isEditing ? (
-                <select
+                <Select
                   value={state.priority}
-                  onChange={(e) =>
+                  onValueChange={(value) =>
                     dispatch({
                       type: 'SET_FIELD',
                       field: 'priority',
-                      value: e.target.value,
+                      value,
                     })
                   }
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                  <option value="critical">Critical</option>
-                </select>
+                  <RadixSelect.Item value="low">Low</RadixSelect.Item>
+                  <RadixSelect.Item value="medium">Medium</RadixSelect.Item>
+                  <RadixSelect.Item value="high">High</RadixSelect.Item>
+                  <RadixSelect.Item value="critical">Critical</RadixSelect.Item>
+                </Select>
               ) : (
                 <Text>{state.priority}</Text>
               )}

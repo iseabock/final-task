@@ -1,0 +1,228 @@
+.select {
+  /* Base styles using Radix design tokens */
+  font-family: var(--font-family) !important;
+  border-radius: var(--radius-2) !important;
+  transition: all 200ms ease !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  gap: 8px !important;
+  border: none !important;
+  background-color: var(--gray-1) !important;
+  color: var(--gray-12) !important;
+  padding: 0 12px !important;
+  height: 32px !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+}
+
+.content {
+  background-color: var(--gray-1) !important;
+  border-radius: var(--radius-2) !important;
+  box-shadow: 0 2px 10px var(--black-a7) !important;
+  min-width: var(--radix-select-trigger-width) !important;
+  z-index: 1000 !important;
+}
+
+.select:hover {
+  background-color: var(--gray-2) !important;
+}
+
+/* * Size variations */
+.sm {
+  height: 24px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+}
+
+.md {
+  height: 32px !important;
+  padding: 0 12px !important;
+  font-size: 14px !important;
+  border-radius: 6px !important;
+}
+
+.lg {
+  height: 40px !important;
+  padding: 0 16px !important;
+  font-size: 15px !important;
+  border-radius: 8px !important;
+}
+
+.xl {
+  height: 48px !important;
+  padding: 0 20px !important;
+  font-size: 16px !important;
+  border-radius: 10px !important;
+}
+
+.gray.solid {
+  background-color: var(--gray-1) !important;
+  color: var(--gray-12) !important;
+  border: none !important;
+}
+
+.gray.solid:focus,
+.gray.solid:focus-visible {
+  box-shadow: none !important;
+  border: 1px solid rgb(112, 168, 228) !important;
+}
+
+.gray.solid:hover {
+  background-color: var(--gray-2) !important;
+}
+
+.gray.soft {
+  background-color: var(--gray-1) !important;
+  color: var(--gray-12) !important;
+  border: none !important;
+}
+
+.gray.soft:hover {
+  background-color: var(--gray-2) !important;
+}
+
+.gray.outline {
+  border: none !important;
+}
+
+.gray.outline:hover {
+  background-color: var(--gray-2) !important;
+}
+
+/* Blue variant */
+.blue.solid {
+  background-color: rgb(112, 168, 228) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.blue.solid:hover {
+  background-color: rgb(59, 139, 225) !important;
+}
+
+.blue.soft {
+  background-color: rgb(230, 241, 255) !important;
+  color: rgb(0, 122, 255) !important;
+  border: none !important;
+}
+
+.blue.soft:hover {
+  background-color: rgb(220, 235, 255) !important;
+}
+
+.blue.outline {
+  border: 1px solid rgb(59, 139, 225) !important;
+  color: rgb(112, 168, 228) !important;
+  background: transparent !important;
+}
+
+.blue.outline:hover {
+  background-color: rgb(230, 241, 255) !important;
+}
+
+/* Green variant */
+.green.solid {
+  background-color: rgb(52, 199, 89) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.green.solid:hover {
+  background-color: rgb(42, 179, 79) !important;
+}
+
+.green.soft {
+  background-color: rgb(236, 247, 238) !important;
+  color: rgb(52, 199, 89) !important;
+  border: none !important;
+}
+
+.green.soft:hover {
+  background-color: rgb(226, 242, 229) !important;
+}
+
+.green.outline {
+  border: 1px solid rgb(52, 199, 89) !important;
+  color: rgb(52, 199, 89) !important;
+  background: transparent !important;
+}
+
+.green.outline:hover {
+  background-color: rgb(236, 247, 238) !important;
+}
+
+/* Red variant */
+.red.solid {
+  background-color: rgb(255, 59, 48) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.red.solid:hover {
+  background-color: rgb(255, 45, 34) !important;
+}
+
+.red.soft {
+  background-color: rgb(255, 235, 235) !important;
+  color: rgb(255, 59, 48) !important;
+  border: none !important;
+}
+
+.red.soft:hover {
+  background-color: rgb(255, 225, 225) !important;
+}
+
+.red.outline {
+  border: 1px solid rgb(255, 59, 48) !important;
+  color: rgb(255, 59, 48) !important;
+  background: transparent !important;
+}
+
+.red.outline:hover {
+  background-color: rgb(255, 235, 235) !important;
+}
+
+/* Purple variant */
+.purple.solid {
+  background-color: rgb(175, 82, 222) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.purple.solid:hover {
+  background-color: rgb(165, 72, 212) !important;
+}
+
+.purple.soft {
+  background-color: rgb(245, 235, 255) !important;
+  color: rgb(175, 82, 222) !important;
+  border: none !important;
+}
+
+.purple.soft:hover {
+  background-color: rgb(235, 225, 255) !important;
+}
+
+.purple.outline {
+  border: 1px solid rgb(175, 82, 222) !important;
+  color: rgb(175, 82, 222) !important;
+  background: transparent !important;
+}
+
+.purple.outline:hover {
+  background-color: rgb(245, 235, 255) !important;
+}
+
+/* Disabled state */
+.select:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Focus state */
+.select:focus-visible {
+  outline: none !important;
+  /* box-shadow: 0 0 0 2px var(--gray-8) !important; */
+  box-shadow: none !important;
+}

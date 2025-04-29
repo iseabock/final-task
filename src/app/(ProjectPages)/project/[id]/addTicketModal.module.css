@@ -1,0 +1,51 @@
+.prioritySelect {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.statusSelect {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.typeSelect {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.assigneeSelect {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.inputSection {
+  margin-bottom: 10px !important;
+}
+
+.inputSection label div {
+  color: #444 !important;
+}
+
+.inputSection label div {
+  margin-bottom: 5px !important;
+}
+
+.inputSection input,
+.inputSection textarea,
+.inputSection :global(.rt-TextFieldRoot),
+.inputSection :global(.rt-TextArea),
+.inputSection :global(.rt-TextArea) textarea,
+.inputSection :global(.rt-TextAreaRoot) {
+  border-radius: 4px !important;
+  padding: 2px !important;
+  /* margin-top: 5px !important; */
+}
+
+.inputSection input::placeholder,
+.inputSection textarea::placeholder {
+  color: #ccc !important;
+}
