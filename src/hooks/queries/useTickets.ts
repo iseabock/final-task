@@ -12,7 +12,7 @@ interface Ticket {
   points?: number;
   type?: string;
   createdBy: string;
-  assignee: string;
+  assignee?: string;
   mode: 'scrum' | 'kanban' | 'none';
 }
 

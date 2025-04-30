@@ -78,7 +78,6 @@
 .selected {
   color: var(--ticketTextColor_01);
   border: 5px solid var(--ticketTextColor_02);
-  filter: drop-shadow(3px 3px 2px #9999995f);
 }
 
 .bugIcon {

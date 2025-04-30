@@ -9,7 +9,7 @@ export interface ITicket extends Document {
   priority: 'low' | 'medium' | 'high' | 'critical';
   points?: number;
   type: 'bug' | 'feature' | 'task';
-  assignee: mongoose.Schema.Types.ObjectId;
+  assignee?: mongoose.Schema.Types.ObjectId;
   created_by: mongoose.Schema.Types.ObjectId;
   created_at?: Date;
 }

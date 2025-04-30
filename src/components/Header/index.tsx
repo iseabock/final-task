@@ -27,7 +27,7 @@ const Header = () => {
     <Box className={styles.header}>
       <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
       <Flex justify="between" align="center" px="4" py="2">
-        <div>Task Manager</div>
+        <h1>Final Task</h1>
         <Flex gap="3" align="center">
           {status === 'authenticated' ? (
             <>
