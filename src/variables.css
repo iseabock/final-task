@@ -1,0 +1,19 @@
+:root {
+  --low: #4169e1;
+  --lowOpacity: #4169e133;
+  --medium: #f6e637;
+  --mediumOpacity: #f6e63733;
+  --high: #f86d2c;
+  --highOpacity: #f86d2c33;
+  --critical: #f66674;
+  --criticalOpacity: #f6667433;
+  --bug: #f03a4c;
+  --bugOpacity: #f03a4c33;
+  --feature: #0099ff;
+  --featureOpacity: #0099ff33;
+  --selected: #f8f8f2;
+  --selectedOpacity: #f8f8f233;
+  --ticketTextColor_00: #456789;
+  --ticketTextColor_01: #3c6792;
+  --ticketTextColor_02: #666666;
+}
