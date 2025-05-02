@@ -28,7 +28,7 @@ const initialState = {
   priority: 'medium',
   points: '0',
   type: 'feature',
-  assignee: 'Unassigned',
+  assignee: '',
   createdBy: '',
   createdAt: '',
   isOpen: false,
@@ -264,9 +264,6 @@ const AddTicketModal = ({
                     })
                   }
                 >
-                  <RadixSelect.Item key="unassigned" value="unassigned">
-                    Unassigned
-                  </RadixSelect.Item>
                   {users?.map((user) => (
                     <RadixSelect.Item
                       key={user._id.toString()}

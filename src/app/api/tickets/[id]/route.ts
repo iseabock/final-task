@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
 
-import Ticket from '@/db/models/Ticket';
+import { Ticket } from '@/db/models/Ticket';
 import { connectDB } from '@/lib/mongodb';
 
 // 🟡 PATCH - Update ticket status only
