@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
-import { Box, Flex, Heading, Link } from '@radix-ui/themes';
+import { GearIcon } from '@radix-ui/react-icons';
+import { Box, Button, Flex, Heading, Link } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 import { useParams } from 'next/navigation';
 
+import camelCaseToTitleCase from '@/app/utils/camelCaseToTitleCase';
 import { IProject } from '@/db/models/Project';
+import { IProjectConfig } from '@/db/models/ProjectConfig';
 import { ITicket } from '@/db/models/Ticket';
 import { IUser } from '@/db/models/User';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
@@ -15,6 +18,7 @@ import styles from './project.module.css';
 
 import { useProject } from '../../../context/ProjectContext';
 import AddTicketModal from './AddTicketModal';
+import ProjectConfigModal from './ProjectConfigModal';
 import SelectedTicket from './SelectedTicket';
 import Ticket from './Ticket';
 
@@ -39,6 +43,11 @@ const ProjectPage = () => {
   const params = useParams();
   const { id } = params;
 
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [projectConfig, setProjectConfig] = useState<IProjectConfig | null>(
+    null
+  );
+
   const fetchTickets = async () => {
     try {
       const res = await fetch(
@@ -49,16 +58,19 @@ const ProjectPage = () => {
       );
 
       if (!res.ok) {
-        throw new Error('Failed to fetch project');
+        throw new Error('Failed to fetch tickets');
       }
 
       const data: ITicket[] = await res.json();
+      if (data.length === 0) {
+        console.warn('No tickets found for project');
+      }
       setTickets(data);
       if (selectedTicket === undefined && data.length > 0) {
         setSelectedTicket(data[0]);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching tickets:', error);
     }
   };
 
@@ -106,9 +118,10 @@ const ProjectPage = () => {
     }
   };
 
-  const open = tickets.filter((t) => t.status === 'open');
-  const inProgress = tickets.filter((t) => t.status === 'inProgress');
-  const closed = tickets.filter((t) => t.status === 'closed');
+  const getTicketsByStatus = (statusName: string) => {
+    const filteredTickets = tickets.filter((t) => t.status === statusName);
+    return filteredTickets;
+  };
 
   useEffect(() => {
     const loadProject = async () => {
@@ -130,6 +143,30 @@ const ProjectPage = () => {
     loadUsers();
   }, [id, getUsersForProject]);
 
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${id}/config`
+        );
+        if (!res.ok) throw new Error('Failed to fetch config');
+        const data = await res.json();
+        if (!data.statuses || data.statuses.length === 0) {
+          console.warn('No statuses found in project config');
+        }
+        setProjectConfig(data);
+      } catch (error) {
+        console.error('Error fetching config:', error);
+      }
+    };
+
+    fetchConfig();
+  }, [id]);
+
+  if (!projectConfig) {
+    return <div>Loading project configuration...</div>;
+  }
+
   return (
     <Box className={styles.projectContainer}>
       <Flex justify="between">
@@ -139,132 +176,69 @@ const ProjectPage = () => {
           </h1>
           <h2>{project?.name}</h2>
         </Box>
+        <Button variant="outline" onClick={() => setIsConfigOpen(true)}>
+          <GearIcon /> Configure
+        </Button>
       </Flex>
       <Flex gap="3">
-        <Box width="66.6%">
+        <Box width="100%">
           <Flex className={styles.ticketsContainer} gap="3" align="start">
-            <Box
-              width="33.3%"
-              className={`${styles.open} ${styles.column} ${
-                draggingOverColumn === 'open' && draggedFromColumn !== 'open'
-                  ? styles.dragOver
-                  : ''
-              }`}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setDraggingOverColumn('open');
-              }}
-              onDragLeave={() => setDraggingOverColumn(null)}
-              onDrop={(e) => {
-                e.preventDefault();
-                const ticketId = e.dataTransfer.getData('ticketId');
-                updateTicketStatus(ticketId, 'open');
-                setDraggingOverColumn(null);
-              }}
-            >
-              <Flex justify="between">
-                <Heading size="3" mb="2">
-                  Open
-                </Heading>
-                <AddTicketModal
-                  projectId={id as string}
-                  onTicketAdded={handleTicketAdded}
-                />
-              </Flex>
+            {projectConfig.statuses.map((status) => {
+              const statusTickets = getTicketsByStatus(status.name);
+              return (
+                <Box
+                  key={status.name}
+                  className={`${styles.column} ${
+                    draggingOverColumn === status.name &&
+                    draggedFromColumn !== status.name
+                      ? styles.dragOver
+                      : ''
+                  }`}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setDraggingOverColumn(status.name);
+                  }}
+                  onDragLeave={() => setDraggingOverColumn(null)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const ticketId = e.dataTransfer.getData('ticketId');
+                    updateTicketStatus(ticketId, status.name);
+                    setDraggingOverColumn(null);
+                  }}
+                >
+                  <Flex justify="between" align="center" mb="3">
+                    <Heading size="3">
+                      {camelCaseToTitleCase(status.name)}
+                    </Heading>
+                    {status.name === 'open' && (
+                      <AddTicketModal
+                        projectId={id as string}
+                        onTicketAdded={handleTicketAdded}
+                      />
+                    )}
+                  </Flex>
 
-              {open?.map((ticket) => (
-                <Ticket
-                  key={ticket._id.toString()}
-                  ticket={ticket}
-                  assignee={
-                    users.find(
-                      (user) =>
-                        user._id.toString() === ticket.assignee?.toString()
-                    )?.name
-                  }
-                  column={ticket.status}
-                  onClick={() => handleSelectedTicket(ticket)}
-                  selected={
-                    selectedTicket?._id.toString() === ticket._id.toString()
-                  }
-                  setDraggedFromColumn={setDraggedFromColumn}
-                />
-              ))}
-            </Box>
-
-            <Box
-              width="33.3%"
-              className={`${styles.inProgress} ${styles.column} ${
-                draggingOverColumn === 'inProgress' &&
-                draggedFromColumn !== 'inProgress'
-                  ? styles.dragOver
-                  : ''
-              }`}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setDraggingOverColumn('inProgress');
-              }}
-              onDragLeave={() => setDraggingOverColumn(null)}
-              onDrop={(e) => {
-                e.preventDefault();
-                const ticketId = e.dataTransfer.getData('ticketId');
-                updateTicketStatus(ticketId, 'inProgress');
-                setDraggingOverColumn(null);
-              }}
-            >
-              <Heading size="3" mb="2">
-                In Progress
-              </Heading>
-              {inProgress?.map((ticket) => (
-                <Ticket
-                  key={ticket._id.toString()}
-                  ticket={ticket}
-                  column={ticket.status}
-                  onClick={() => handleSelectedTicket(ticket)}
-                  selected={
-                    selectedTicket?._id.toString() === ticket._id.toString()
-                  }
-                  setDraggedFromColumn={setDraggedFromColumn}
-                />
-              ))}
-            </Box>
-
-            <Box
-              width="33.3%"
-              className={`${styles.closed} ${styles.column} ${
-                draggingOverColumn === 'closed' &&
-                draggedFromColumn !== 'closed'
-                  ? styles.dragOver
-                  : ''
-              }`}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setDraggingOverColumn('closed');
-              }}
-              onDragLeave={() => setDraggingOverColumn(null)}
-              onDrop={(e) => {
-                e.preventDefault();
-                const ticketId = e.dataTransfer.getData('ticketId');
-                updateTicketStatus(ticketId, 'closed');
-                setDraggingOverColumn(null);
-              }}
-            >
-              <Heading size="3" mb="2">
-                Done
-              </Heading>
-              {closed?.map((ticket) => (
-                <Ticket
-                  key={ticket._id.toString()}
-                  ticket={ticket}
-                  column={ticket.status}
-                  onClick={() => handleSelectedTicket(ticket)}
-                  selected={
-                    selectedTicket?._id.toString() === ticket._id.toString()
-                  }
-                  setDraggedFromColumn={setDraggedFromColumn}
-                />
-              ))}
-            </Box>
+                  {statusTickets.map((ticket) => (
+                    <Ticket
+                      key={ticket._id.toString()}
+                      ticket={ticket}
+                      assignee={
+                        users.find(
+                          (user) =>
+                            user._id.toString() === ticket.assignee?.toString()
+                        )?.name
+                      }
+                      column={ticket.status}
+                      onClick={() => handleSelectedTicket(ticket)}
+                      selected={
+                        selectedTicket?._id.toString() === ticket._id.toString()
+                      }
+                      setDraggedFromColumn={setDraggedFromColumn}
+                    />
+                  ))}
+                </Box>
+              );
+            })}
           </Flex>
         </Box>
         <Box width="33.3%" className={styles.currentTickets}>
@@ -284,6 +258,11 @@ const ProjectPage = () => {
           )}
         </Box>
       </Flex>
+      <ProjectConfigModal
+        projectId={id as string}
+        isOpen={isConfigOpen}
+        onOpenChange={setIsConfigOpen}
+      />
     </Box>
   );
 };

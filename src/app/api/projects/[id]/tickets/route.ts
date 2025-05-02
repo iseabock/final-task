@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
-import Ticket from '@/db/models/Ticket';
+import { Ticket } from '@/db/models/Ticket';
 import { connectDB } from '@/lib/mongodb';
 
 import { authOptions } from '../../../auth/[...nextauth]/route';

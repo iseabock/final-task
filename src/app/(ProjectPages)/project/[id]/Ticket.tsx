@@ -61,7 +61,7 @@ const Ticket = ({
       </Text>
       <div className={styles.ticketMeta}>
         <strong>{ticket.points}pts</strong>
-        <span>{assignee ? assignee : 'Unassigned'}</span>
+        <span>{assignee}</span>
       </div>
     </Box>
   );

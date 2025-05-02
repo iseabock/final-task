@@ -1,57 +1,68 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-export interface ITicket extends Document {
+export interface ITicket {
   _id: mongoose.Schema.Types.ObjectId;
   project_id: mongoose.Schema.Types.ObjectId;
   title: string;
   description?: string;
-  status: 'open' | 'inProgress' | 'closed';
+  status: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  points?: number;
-  type: 'bug' | 'feature' | 'task';
-  assignee?: mongoose.Schema.Types.ObjectId;
+  points?: string;
+  type: 'feature' | 'bug' | 'task';
+  assignee?: mongoose.Schema.Types.ObjectId | null;
   created_by: mongoose.Schema.Types.ObjectId;
-  created_at?: Date;
+  created_at: string;
+  updated_at: string;
 }
 
-const ticketSchema = new Schema<ITicket>({
-  project_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Project',
-    required: true,
+const ticketSchema = new mongoose.Schema<ITicket>(
+  {
+    project_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Project',
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    status: {
+      type: String,
+      required: true,
+    },
+    priority: {
+      type: String,
+      enum: ['low', 'medium', 'high', 'critical'],
+      required: true,
+    },
+    points: {
+      type: String,
+    },
+    type: {
+      type: String,
+      enum: ['feature', 'bug', 'task'],
+      required: true,
+    },
+    assignee: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    created_by: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
-  title: { type: String, required: true },
-  description: String,
-  status: {
-    type: String,
-    enum: ['open', 'inProgress', 'closed'],
-    default: 'open',
-  },
-  priority: {
-    type: String,
-    enum: ['low', 'medium', 'high', 'critical'],
-    default: 'medium',
-  },
-  points: { type: String, default: 0 },
-  assignee: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: false,
-  },
-  type: {
-    type: String,
-    enum: ['bug', 'feature'],
-    default: 'feature',
-  },
-  created_by: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  created_at: { type: Date, default: Date.now },
-});
+  {
+    timestamps: true,
+  }
+);
 
-const Ticket =
-  mongoose.models.Ticket || mongoose.model<ITicket>('Ticket', ticketSchema);
+// Add index for faster queries
+ticketSchema.index({ project_id: 1, status: 1 });
 
-export default Ticket;
+export const Ticket = mongoose.model<ITicket>('Ticket', ticketSchema);

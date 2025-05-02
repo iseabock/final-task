@@ -5,7 +5,12 @@
 }
 
 .ticketsContainer {
-  height: 100%;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1rem;
 }
 
 .box {
@@ -20,17 +25,18 @@
 }
 
 .column {
-  height: 100%;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  border-color: #ccc;
-  /* background-color: #eee; */
+  min-width: 300px;
+  min-height: 200px;
+  flex: 1;
+  background-color: #f6f6f2;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
 }
 
-.dragOver {
-  background-color: #fff;
+.column.dragOver {
+  background-color: #f0f0f0;
+  transform: scale(1.02);
 }
 
 /* .open {
