@@ -16,10 +16,12 @@ const ProjectConfigModal = ({
   projectId,
   isOpen,
   onOpenChange,
+  onConfigUpdated,
 }: {
   projectId: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  onConfigUpdated?: () => void;
 }) => {
   const [statuses, setStatuses] = useState<Status[]>([]);
 
@@ -80,6 +82,7 @@ const ProjectConfigModal = ({
       );
       if (!res.ok) throw new Error('Failed to update config');
       onOpenChange(false);
+      onConfigUpdated?.();
     } catch (error) {
       console.error('Error updating config:', error);
     }

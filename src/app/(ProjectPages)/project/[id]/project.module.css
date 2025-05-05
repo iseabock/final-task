@@ -25,18 +25,26 @@
 }
 
 .column {
-  min-width: 300px;
   min-height: 200px;
-  flex: 1;
+  flex: 1 1 0%;
+  flex-grow: 1;
+  flex-basis: 0;
   background-color: #f6f6f2;
   border-radius: 8px;
   padding: 1rem;
   transition: all 0.2s ease;
+  width: 1fr; /* or fixed width like 200px if needed */
+  min-width: 0; /* Necessary to allow flexbox to apply overflow properly */
+  overflow: hidden;
 }
 
 .column.dragOver {
   background-color: #f0f0f0;
   transform: scale(1.02);
+}
+
+.selectedTicketContainer {
+  flex-shrink: 0;
 }
 
 /* .open {
@@ -57,6 +65,9 @@
 @media (max-width: 1024px) {
   .box:nth-child(3) {
     grid-column: span 2;
+  }
+  .ticketsContainer {
+    flex-direction: column;
   }
 }
 

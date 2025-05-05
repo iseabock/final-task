@@ -163,6 +163,29 @@ const ProjectPage = () => {
     fetchConfig();
   }, [id]);
 
+  const refreshProjectData = async () => {
+    try {
+      // Refresh config
+      const configRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${id}/config`
+      );
+      if (!configRes.ok) throw new Error('Failed to fetch config');
+      const configData = await configRes.json();
+      setProjectConfig(configData);
+
+      // Refresh tickets
+      const ticketsRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${id}/tickets`,
+        { cache: 'no-store' }
+      );
+      if (!ticketsRes.ok) throw new Error('Failed to fetch tickets');
+      const ticketsData = await ticketsRes.json();
+      setTickets(ticketsData);
+    } catch (error) {
+      console.error('Error refreshing project data:', error);
+    }
+  };
+
   if (!projectConfig) {
     return <div>Loading project configuration...</div>;
   }
@@ -181,67 +204,67 @@ const ProjectPage = () => {
         </Button>
       </Flex>
       <Flex gap="3">
-        <Box width="100%">
-          <Flex className={styles.ticketsContainer} gap="3" align="start">
-            {projectConfig.statuses.map((status) => {
-              const statusTickets = getTicketsByStatus(status.name);
-              return (
-                <Box
-                  key={status.name}
-                  className={`${styles.column} ${
-                    draggingOverColumn === status.name &&
-                    draggedFromColumn !== status.name
-                      ? styles.dragOver
-                      : ''
-                  }`}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setDraggingOverColumn(status.name);
-                  }}
-                  onDragLeave={() => setDraggingOverColumn(null)}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    const ticketId = e.dataTransfer.getData('ticketId');
-                    updateTicketStatus(ticketId, status.name);
-                    setDraggingOverColumn(null);
-                  }}
-                >
-                  <Flex justify="between" align="center" mb="3">
-                    <Heading size="3">
-                      {camelCaseToTitleCase(status.name)}
-                    </Heading>
-                    {status.name === 'open' && (
-                      <AddTicketModal
-                        projectId={id as string}
-                        onTicketAdded={handleTicketAdded}
-                      />
-                    )}
-                  </Flex>
-
-                  {statusTickets.map((ticket) => (
-                    <Ticket
-                      key={ticket._id.toString()}
-                      ticket={ticket}
-                      assignee={
-                        users.find(
-                          (user) =>
-                            user._id.toString() === ticket.assignee?.toString()
-                        )?.name
-                      }
-                      column={ticket.status}
-                      onClick={() => handleSelectedTicket(ticket)}
-                      selected={
-                        selectedTicket?._id.toString() === ticket._id.toString()
-                      }
-                      setDraggedFromColumn={setDraggedFromColumn}
+        {/* <Box width="100%"> */}
+        <Flex className={styles.ticketsContainer} gap="3" align="start">
+          {projectConfig.statuses.map((status) => {
+            const statusTickets = getTicketsByStatus(status.name);
+            return (
+              <Box
+                key={status.name}
+                className={`${styles.column} ${
+                  draggingOverColumn === status.name &&
+                  draggedFromColumn !== status.name
+                    ? styles.dragOver
+                    : ''
+                }`}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDraggingOverColumn(status.name);
+                }}
+                onDragLeave={() => setDraggingOverColumn(null)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const ticketId = e.dataTransfer.getData('ticketId');
+                  updateTicketStatus(ticketId, status.name);
+                  setDraggingOverColumn(null);
+                }}
+              >
+                <Flex justify="between" align="center" mb="3">
+                  <Heading size="3">
+                    {camelCaseToTitleCase(status.name)}
+                  </Heading>
+                  {status.name === 'open' && (
+                    <AddTicketModal
+                      projectId={id as string}
+                      onTicketAdded={handleTicketAdded}
                     />
-                  ))}
-                </Box>
-              );
-            })}
-          </Flex>
-        </Box>
-        <Box width="33.3%" className={styles.currentTickets}>
+                  )}
+                </Flex>
+
+                {statusTickets.map((ticket) => (
+                  <Ticket
+                    key={ticket._id.toString()}
+                    ticket={ticket}
+                    assignee={
+                      users.find(
+                        (user) =>
+                          user._id.toString() === ticket.assignee?.toString()
+                      )?.name
+                    }
+                    column={ticket.status}
+                    onClick={() => handleSelectedTicket(ticket)}
+                    selected={
+                      selectedTicket?._id.toString() === ticket._id.toString()
+                    }
+                    setDraggedFromColumn={setDraggedFromColumn}
+                  />
+                ))}
+              </Box>
+            );
+          })}
+        </Flex>
+        {/* </Box> */}
+        <Box width="33.3%" className={styles.selectedTicketContainer}>
           {selectedTicket && (
             <SelectedTicket
               ticket={selectedTicket}
@@ -262,6 +285,7 @@ const ProjectPage = () => {
         projectId={id as string}
         isOpen={isConfigOpen}
         onOpenChange={setIsConfigOpen}
+        onConfigUpdated={refreshProjectData}
       />
     </Box>
   );
