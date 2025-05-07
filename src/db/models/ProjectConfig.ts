@@ -35,6 +35,7 @@ projectConfigSchema.index({ project_id: 1 }, { unique: true });
 projectConfigSchema.pre('save', function (next) {
   if (this.statuses.length === 0) {
     this.statuses = [
+      { name: 'backlog' },
       { name: 'open' },
       { name: 'inProgress' },
       { name: 'closed' },

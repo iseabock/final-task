@@ -127,7 +127,7 @@ export const api = {
         data: {
           title: string;
           description?: string;
-          status: 'open' | 'inProgress' | 'closed';
+          status: 'backlog' | 'open' | 'inProgress' | 'closed';
           priority: 'low' | 'medium' | 'high' | 'critical';
           points?: number;
           assignee?: string;
@@ -151,7 +151,7 @@ export const api = {
         data: {
           title?: string;
           description?: string;
-          status?: 'open' | 'inProgress' | 'closed';
+          status?: 'backlog' | 'open' | 'inProgress' | 'closed';
           priority?: 'low' | 'medium' | 'high' | 'critical';
           points?: number;
           assignee?: string;

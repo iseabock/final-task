@@ -3,6 +3,8 @@ import { Badge, Link, Table } from '@radix-ui/themes';
 import { IProject } from '@/db/models/Project';
 import { useTickets } from '@/hooks/queries/useTickets';
 
+import styles from './dashboard.module.css';
+
 const ProjectCard = ({ project }: { project: IProject }) => {
   const {
     data: tickets,
@@ -11,6 +13,9 @@ const ProjectCard = ({ project }: { project: IProject }) => {
     // error: ticketsError,
   } = useTickets(project._id.toString());
 
+  const backlogTickets = tickets?.filter(
+    (ticket) => ticket.status === 'backlog'
+  );
   const openTickets = tickets?.filter((ticket) => ticket.status === 'open');
   const inProgressTickets = tickets?.filter(
     (ticket) => ticket.status === 'inProgress'
@@ -19,8 +24,11 @@ const ProjectCard = ({ project }: { project: IProject }) => {
 
   return (
     <>
-      <Table.Cell>
+      <Table.Cell className={styles.projectName}>
         <Link href={`/project/${project._id}`}>{project.name}</Link>
+      </Table.Cell>
+      <Table.Cell>
+        <Badge color="gray">{backlogTickets?.length} backlog</Badge>
       </Table.Cell>
       <Table.Cell>
         <Badge color="green">{openTickets?.length} open</Badge>

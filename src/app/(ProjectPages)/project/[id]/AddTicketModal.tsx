@@ -174,6 +174,7 @@ const AddTicketModal = ({
                     })
                   }
                 >
+                  <RadixSelect.Item value="backlog">Backlog</RadixSelect.Item>
                   <RadixSelect.Item value="open">Open</RadixSelect.Item>
                   <RadixSelect.Item value="inProgress">
                     In Progress

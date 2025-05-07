@@ -45,7 +45,7 @@ export function useCreateTicket() {
     mutationFn: (data: CreateTicketData) => {
       const ticketData = {
         ...data,
-        status: data.status as 'open' | 'inProgress' | 'closed',
+        status: data.status as 'backlog' | 'open' | 'inProgress' | 'closed',
         priority: data.priority as 'low' | 'medium' | 'high' | 'critical',
         type: data.type as 'bug' | 'feature',
       };

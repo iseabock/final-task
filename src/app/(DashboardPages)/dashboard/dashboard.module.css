@@ -13,3 +13,10 @@
 .projectCard span {
   margin-left: 10px;
 }
+
+.projectName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}

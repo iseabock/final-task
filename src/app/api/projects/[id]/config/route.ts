@@ -4,17 +4,18 @@ import { ProjectConfig } from '@/db/models/ProjectConfig';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
+    const { id } = await context.params;
     const config = await ProjectConfig.findOne({
-      project_id: params.id,
+      project_id: id,
     });
 
     if (!config) {
       // Create default config if none exists
       const newConfig = await ProjectConfig.create({
-        project_id: params.id,
+        project_id: id,
       });
       return NextResponse.json(newConfig);
     }

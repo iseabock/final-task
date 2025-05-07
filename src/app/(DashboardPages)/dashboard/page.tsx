@@ -56,9 +56,10 @@ export default function DashboardPage() {
         <FirstColumn
           session={session}
           organization={organization as unknown as IOrganization}
+          projects={projects as unknown as IProject[]}
         />
 
-        <SecondColumn projects={projects as unknown as IProject[]} />
+        <SecondColumn />
 
         <ThirdColumn />
       </Flex>

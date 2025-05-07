@@ -6,6 +6,7 @@ import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Text } from '@radix-ui/themes';
 
 import camelCaseToTitleCase from '@/app/utils/camelCaseToTitleCase';
+import titleCaseToCamelCase from '@/app/utils/titleCaseToCamelCase';
 import Modal from '@/components/Modal';
 
 interface Status {
@@ -65,7 +66,7 @@ const ProjectConfigModal = ({
     const newStatuses = [...statuses];
     newStatuses[index] = {
       ...newStatuses[index],
-      [field]: value,
+      [field]: titleCaseToCamelCase(value),
     };
     setStatuses(newStatuses);
   };

@@ -1,13 +1,8 @@
-import { Box, Card, Flex, Heading, Table } from '@radix-ui/themes';
-
-import AddProjectModal from '@/components/AddProjectModal';
-import { IProject } from '@/db/models/Project';
+import { Box, Card, Flex, Heading, Separator, Text } from '@radix-ui/themes';
 
 import styles from './dashboard.module.css';
 
-import ProjectCard from './ProjectCard';
-
-const SecondColumn = ({ projects }: { projects: IProject[] }) => {
+const SecondColumn = () => {
   return (
     <Flex
       as="div"
@@ -18,35 +13,120 @@ const SecondColumn = ({ projects }: { projects: IProject[] }) => {
       className={styles.currentProjects}
     >
       <Card size="4">
-        <Heading as="h3" size="6" trim="start" mb="5">
-          Current Projects
+        <Heading as="h3" size="6" trim="start" mb="2">
+          Notifications
         </Heading>
-        {projects?.length === 0 ? (
-          <p>No projects found</p>
-        ) : (
-          <Table.Root>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>Project</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Tickets</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell />
-                <Table.ColumnHeaderCell />
-              </Table.Row>
-            </Table.Header>
-            <Table.Body className={styles.projectCard}>
-              {projects &&
-                projects?.length > 0 &&
-                projects.map((project) => (
-                  <Table.Row key={project._id.toString()}>
-                    <ProjectCard project={project as IProject} />
-                  </Table.Row>
-                ))}
-            </Table.Body>
-          </Table.Root>
-        )}
-        <Box className={styles.addProjectModal}>
-          <AddProjectModal />
+
+        <Text as="p" size="2" mb="6" color="gray">
+          Manage your notification settings.
+        </Text>
+
+        <Box>
+          <Separator size="4" my="5" />
         </Box>
+
+        <Flex direction="column">
+          <Flex gap="9" align="start" justify="between">
+            <Box>
+              <Heading as="h4" size="3" mb="1">
+                Comments
+              </Heading>
+              <Text as="p" size="2" color="gray">
+                Receive notifications when someone comments on your documents or
+                mentions you.
+              </Text>
+            </Box>
+            <Flex direction="column" gap="4" mt="1">
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Push</Text>
+                </Text>
+              </Flex>
+
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Email</Text>
+                </Text>
+              </Flex>
+
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Slack</Text>
+                </Text>
+              </Flex>
+            </Flex>
+          </Flex>
+
+          <Box>
+            <Separator size="4" my="5" />
+          </Box>
+
+          <Flex gap="9" align="start" justify="between">
+            <Box>
+              <Heading as="h4" size="3" mb="1">
+                Favorites
+              </Heading>
+              <Text as="p" size="2" color="gray">
+                Receive notifications when there is activity related to your
+                favorited items.
+              </Text>
+            </Box>
+            <Flex direction="column" gap="4" mt="1">
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Push</Text>
+                </Text>
+              </Flex>
+
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Email</Text>
+                </Text>
+              </Flex>
+
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Slack</Text>
+                </Text>
+              </Flex>
+            </Flex>
+          </Flex>
+
+          <Box>
+            <Separator size="4" my="5" />
+          </Box>
+
+          <Flex gap="9" align="start" justify="between">
+            <Box>
+              <Heading as="h4" size="3" mb="1">
+                New documents
+              </Heading>
+              <Text as="p" size="2" color="gray">
+                Receive notifications whenever people on your team create new
+                documents.
+              </Text>
+            </Box>
+            <Flex direction="column" gap="4" mt="1">
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Push</Text>
+                </Text>
+              </Flex>
+
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Email</Text>
+                </Text>
+              </Flex>
+
+              <Flex asChild gap="2">
+                <Text as="label" size="2" weight="bold">
+                  <Text>Slack</Text>
+                </Text>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
       </Card>
     </Flex>
   );

@@ -204,7 +204,6 @@ const ProjectPage = () => {
         </Button>
       </Flex>
       <Flex gap="3">
-        {/* <Box width="100%"> */}
         <Flex className={styles.ticketsContainer} gap="3" align="start">
           {projectConfig.statuses.map((status) => {
             const statusTickets = getTicketsByStatus(status.name);
@@ -263,7 +262,6 @@ const ProjectPage = () => {
             );
           })}
         </Flex>
-        {/* </Box> */}
         <Box width="33.3%" className={styles.selectedTicketContainer}>
           {selectedTicket && (
             <SelectedTicket
