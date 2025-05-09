@@ -2,9 +2,8 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import Project from '@/db/models/Project';
+import { authOptions } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
-
-import { authOptions } from '../auth/[...nextauth]/route';
 
 // 🟢 GET - Fetch all projects
 export async function GET(req: NextRequest) {

@@ -2,9 +2,8 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import Organization from '@/db/models/Organization';
+import { authOptions } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
-
-import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function GET() {
   try {

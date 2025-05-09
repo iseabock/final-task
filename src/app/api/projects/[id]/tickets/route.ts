@@ -4,9 +4,8 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { Ticket } from '@/db/models/Ticket';
+import { authOptions } from '@/lib/auth';
 import { connectDB } from '@/lib/mongodb';
-
-import { authOptions } from '../../../auth/[...nextauth]/route';
 
 // 🟢 GET - Fetch a single project by ID
 export async function GET(
