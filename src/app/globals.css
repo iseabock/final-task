@@ -1,6 +1,46 @@
 :root {
+  /* Theme colors */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Priority colors */
+  --low: #4169e1;
+  --lowOpacity: #4169e133;
+  --medium: #f6e637;
+  --mediumOpacity: #f6e63733;
+  --high: #f86d2c;
+  --highOpacity: #f86d2c33;
+  --critical: #f66674;
+  --criticalOpacity: #f6667433;
+
+  /* Ticket type colors */
+  --bug: #f03a4c;
+  --bugOpacity: #f03a4c33;
+  --feature: #0099ff;
+  --featureOpacity: #0099ff33;
+
+  /* Selection colors */
+  --selected: #f8f8f2;
+  --selectedOpacity: #f8f8f233;
+
+  /* Text colors */
+  --ticketTextColor_00: #456789;
+  --ticketTextColor_01: #3c6792;
+  --ticketTextColor_02: #666666;
+
+  /* Gray scale */
+  --gray-1: #f8f8f8;
+  --gray-2: #f0f0f0;
+  --gray-3: #e8e8e8;
+  --gray-4: #e0e0e0;
+  --gray-5: #d8d8d8;
+  --gray-6: #d0d0d0;
+  --gray-7: #c8c8c8;
+  --gray-8: #c0c0c0;
+  --gray-9: #b8b8b8;
+  --gray-10: #b0b0b0;
+  --gray-11: #a8a8a8;
+  --gray-12: #a0a0a0;
 }
 
 @media (prefers-color-scheme: dark) {
