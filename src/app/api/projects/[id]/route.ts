@@ -3,11 +3,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import Project from '@/db/models/Project';
 import { connectDB } from '@/lib/mongodb';
 
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
+
 // 🟢  GET - Fetch a single project by ID
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(
+  request: NextRequest,
+  context: RouteContext
+): Promise<NextResponse> {
   await connectDB();
   try {
-    const id = request.nextUrl.pathname.split('/')[3]; // Get ID from URL
+    const { id } = context.params;
     const project = await Project.findById(id);
 
     if (!project) {
@@ -24,10 +33,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 }
 
-export async function PUT(request: NextRequest): Promise<NextResponse> {
+export async function PUT(
+  request: NextRequest,
+  context: RouteContext
+): Promise<NextResponse> {
   await connectDB();
   try {
-    const id = request.nextUrl.pathname.split('/')[3]; // Get ID from URL
+    const { id } = context.params;
     const body = await request.json();
 
     const project = await Project.findByIdAndUpdate(
@@ -50,10 +62,13 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   }
 }
 
-export async function DELETE(request: NextRequest): Promise<NextResponse> {
+export async function DELETE(
+  request: NextRequest,
+  context: RouteContext
+): Promise<NextResponse> {
   await connectDB();
   try {
-    const id = request.nextUrl.pathname.split('/')[3]; // Get ID from URL
+    const { id } = context.params;
     const project = await Project.findByIdAndDelete(id);
 
     if (!project) {
