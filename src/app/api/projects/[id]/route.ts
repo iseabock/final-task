@@ -6,11 +6,13 @@ import { connectDB } from '@/lib/mongodb';
 // 🟢  GET - Fetch a single project by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+
   await connectDB();
+
   try {
-    const { id } = params;
     const project = await Project.findById(id);
 
     if (!project) {
@@ -18,8 +20,8 @@ export async function GET(
     }
 
     return NextResponse.json(project);
-  } catch (error) {
-    console.error('Error fetching project:', error);
+  } catch (err) {
+    console.error('Error fetching project:', err);
     return NextResponse.json(
       { error: 'Failed to fetch project' },
       { status: 500 }
