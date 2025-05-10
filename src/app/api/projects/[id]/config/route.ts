@@ -5,7 +5,7 @@ import { ProjectConfig } from '@/db/models/ProjectConfig';
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
-) {
+): Promise<NextResponse> {
   try {
     const { id } = params;
     const config = await ProjectConfig.findOne({
@@ -33,7 +33,7 @@ export async function GET(
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
-) {
+): Promise<NextResponse> {
   try {
     const body = await request.json();
     const { statuses } = body;
