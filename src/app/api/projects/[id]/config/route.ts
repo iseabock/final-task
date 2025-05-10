@@ -2,18 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { ProjectConfig } from '@/db/models/ProjectConfig';
 
-interface RouteSegmentProps {
-  params: {
-    id: string;
-  };
-}
-
-export async function GET(
-  request: NextRequest,
-  props: RouteSegmentProps
-): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const { id } = props.params;
+    const id = request.nextUrl.pathname.split('/')[3]; // Get ID from URL
     const config = await ProjectConfig.findOne({
       project_id: id,
     });
@@ -36,16 +27,14 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  props: RouteSegmentProps
-): Promise<NextResponse> {
+export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
+    const id = request.nextUrl.pathname.split('/')[3]; // Get ID from URL
     const body = await request.json();
     const { statuses } = body;
 
     const config = await ProjectConfig.findOneAndUpdate(
-      { project_id: props.params.id },
+      { project_id: id },
       { statuses },
       { new: true, upsert: true }
     );
