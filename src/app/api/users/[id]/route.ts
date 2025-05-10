@@ -6,11 +6,11 @@ import { connectDB } from '@/lib/mongodb';
 // 🟢 GET - Fetch a single user by ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectDB();
   try {
-    const { id } = params;
+    const { id } = await params;
     const user = await User.findById(id);
 
     if (!user) {

@@ -7,11 +7,11 @@ import { connectDB } from '@/lib/mongodb';
 // 🟢 GET - Fetch users by projectId
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectDB();
   try {
-    const { id } = await context.params;
+    const { id } = await params;
     const project = await Project.findById(id);
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });

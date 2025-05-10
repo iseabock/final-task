@@ -10,12 +10,12 @@ import { connectDB } from '@/lib/mongodb';
 // 🟢 GET - Fetch a single project by ID
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectDB();
   try {
     // TODO find out why this await is needed
-    const { id } = await context.params;
+    const { id } = await params;
     const tickets = await Ticket.find({ project_id: id });
 
     if (!tickets) {
@@ -34,7 +34,7 @@ export async function GET(
 // 🟠 POST - Create a new project
 export async function POST(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectDB();
   const session = await getServerSession(authOptions);
@@ -42,7 +42,7 @@ export async function POST(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   try {
-    const { id } = await context.params;
+    const { id } = await params;
 
     const { title, description, status, priority, points, type, assignee } =
       await req.json();
