@@ -7,7 +7,7 @@ export interface IUser extends mongoose.Document {
   email: string;
   password: string;
   role: 'admin' | 'developer' | 'qa';
-  organization_id: mongoose.Schema.Types.ObjectId;
+  organization_id?: mongoose.Schema.Types.ObjectId;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
   organization_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Organization',
-    required: true,
   },
 });
 
