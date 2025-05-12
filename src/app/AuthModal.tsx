@@ -94,12 +94,16 @@ export default function AuthModal({
         <form onSubmit={handleSubmit}>
           {error && <div>{error}</div>}
           {mode === 'signup' && (
-            <TextField.Root
-              placeholder="Full Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
+            <TextField.Root>
+              <TextField.Slot>
+                <input
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </TextField.Slot>
+            </TextField.Root>
           )}
           <TextField.Root
             placeholder="Email"

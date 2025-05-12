@@ -6,11 +6,9 @@ import { connectDB } from '@/lib/mongodb';
 export async function POST(req: NextRequest) {
   await connectDB();
   try {
-    // const { name, email, password, organization_id } = await req.json();
-    const { name, email, password } = await req.json();
+    const { name, email, password, organization_id } = await req.json();
 
-    // if (!name || !email || !password || !organization_id) {
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !organization_id) {
       return NextResponse.json(
         { error: 'Name, email, password, and organization_id are required' },
         { status: 400 }
@@ -32,7 +30,7 @@ export async function POST(req: NextRequest) {
       email,
       password,
       role: 'developer', // Default role
-      // organization_id,
+      organization_id,
     });
 
     await newUser.save();
