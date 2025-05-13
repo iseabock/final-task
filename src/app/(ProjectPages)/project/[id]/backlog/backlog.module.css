@@ -1,0 +1,28 @@
+.backlogContainer {
+  padding: 20px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticketsContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.selectedTicketContainer {
+  border-left: 1px solid var(--gray-5);
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.backlogContainer .ticket {
+  max-width: 100% !important;
+  min-width: 100% !important;
+}

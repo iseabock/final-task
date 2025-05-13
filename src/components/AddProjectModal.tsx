@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { Text, TextField } from '@radix-ui/themes';
+import { Session } from 'next-auth';
 
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/Button/Button';
@@ -24,7 +25,7 @@ const initialFormData: ProjectFormData = {
   organization_id: '',
 };
 
-const AddProjectModal = () => {
+const AddProjectModal = ({ session }: { session: Session }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<ProjectFormData>(initialFormData);
   const { mutate: createProject, isPending, error } = useCreateProject();
@@ -40,7 +41,7 @@ const AddProjectModal = () => {
       {
         ...formData,
         organization_id: organization?._id?.toString() || '',
-        createdBy: 'current-user-id', // TODO: Get this from auth context
+        createdBy: session.user?.id?.toString() || '',
       },
       {
         onSuccess: () => {

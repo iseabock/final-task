@@ -89,7 +89,7 @@ export default function FirstColumn({
           </Table.Root>
         )}
         <Box className={styles.addProjectModal}>
-          <AddProjectModal />
+          <AddProjectModal session={session} />
         </Box>
       </Card>
 

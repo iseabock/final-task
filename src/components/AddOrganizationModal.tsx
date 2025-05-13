@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 
+import { Text, TextField } from '@radix-ui/themes';
 import { useRouter } from 'next/navigation';
 
+import { Button } from '@/components/ui/Button/Button';
 import { useCreateOrganization } from '@/hooks/queries/useOrganizations';
 
 import Modal from './Modal';
@@ -44,6 +46,11 @@ export default function AddOrganizationModal({
 
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
+      <Modal.Trigger asChild>
+        <Button size="md" variant="solid">
+          Add Organization
+        </Button>
+      </Modal.Trigger>
       <Modal.Content
         title="Create Organization"
         description="Create a new organization to manage your projects and tickets"
@@ -51,8 +58,10 @@ export default function AddOrganizationModal({
         <form onSubmit={handleSubmit}>
           {error && <div>{error}</div>}
           <div>
-            <label htmlFor="name">Organization Name</label>
-            <input
+            <Text as="label" size="2" weight="bold">
+              Organization Name
+            </Text>
+            <TextField.Root
               id="name"
               type="text"
               value={name}
@@ -61,25 +70,26 @@ export default function AddOrganizationModal({
             />
           </div>
           <div>
-            <label htmlFor="description">Description</label>
-            <textarea
+            <Text as="label" size="2" weight="bold">
+              Description
+            </Text>
+            <TextField.Root
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              rows={3}
             />
           </div>
           <div>
-            <button
+            <Button
               type="button"
               onClick={() => onOpenChange(false)}
               disabled={isPending}
             >
               Cancel
-            </button>
-            <button type="submit" disabled={isPending}>
+            </Button>
+            <Button type="submit" disabled={isPending}>
               {isPending ? 'Creating...' : 'Create Organization'}
-            </button>
+            </Button>
           </div>
         </form>
       </Modal.Content>
