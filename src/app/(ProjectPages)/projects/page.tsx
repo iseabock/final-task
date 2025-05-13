@@ -1,6 +1,8 @@
 'use client';
 
 import { Box, Flex } from '@radix-ui/themes';
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 
 import AddProjectModal from '@/components/AddProjectModal';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
@@ -9,6 +11,7 @@ import { useProjects } from '@/hooks/queries/useProjects';
 import styles from './projects.module.css';
 
 const ProjectsPage = () => {
+  const { data: session } = useSession();
   const { data: organization, isLoading: isLoadingOrg } = useOrganization();
   const {
     data: projects,
@@ -45,7 +48,7 @@ const ProjectsPage = () => {
       <h1>Projects for {organization.name}</h1>
       <Flex gap="3">
         <Box width="20%" className={styles.box}>
-          <AddProjectModal />
+          <AddProjectModal session={session as Session} />
         </Box>
         <Box width="60%" className={styles.box}>
           <ul>
