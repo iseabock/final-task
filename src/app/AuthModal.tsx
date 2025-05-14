@@ -124,15 +124,17 @@ export default function AuthModal({
                   ? 'Sign In'
                   : 'Sign Up'}
             </Button>
-            <Button
-              variant="soft"
-              onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-              disabled={isLoading}
-            >
-              {mode === 'login'
-                ? "Don't have an account? Sign Up"
-                : 'Already have an account? Sign In'}
-            </Button>
+            {process.env.NODE_ENV === 'development' && (
+              <Button
+                variant="soft"
+                onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
+                disabled={isLoading}
+              >
+                {mode === 'login'
+                  ? "Don't have an account? Sign Up"
+                  : 'Already have an account? Sign In'}
+              </Button>
+            )}
           </div>
         </form>
       </Modal.Content>

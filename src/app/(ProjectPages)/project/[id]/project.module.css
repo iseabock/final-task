@@ -4,6 +4,14 @@
   padding: 10px;
 }
 
+.spinnerContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .ticketsContainer {
   display: flex;
   gap: 1rem;

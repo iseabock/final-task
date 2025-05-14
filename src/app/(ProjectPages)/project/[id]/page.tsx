@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { GearIcon } from '@radix-ui/react-icons';
-import { Box, Button, Flex, Heading, Link } from '@radix-ui/themes';
+import { Box, Button, Flex, Heading, Link, Spinner } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 import { useParams } from 'next/navigation';
 
@@ -187,7 +187,11 @@ const ProjectPage = () => {
   };
 
   if (!projectConfig) {
-    return <div>Loading project configuration...</div>;
+    return (
+      <Box className={styles.spinnerContainer}>
+        <Spinner size="3" />
+      </Box>
+    );
   }
 
   return (

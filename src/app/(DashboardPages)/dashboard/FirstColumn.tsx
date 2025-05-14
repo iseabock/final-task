@@ -2,7 +2,16 @@
 
 import { useState } from 'react';
 
-import { Box, Card, Flex, Grid, Heading, Table, Text } from '@radix-ui/themes';
+import {
+  Badge,
+  Box,
+  Card,
+  Flex,
+  Grid,
+  Heading,
+  Table,
+  Text,
+} from '@radix-ui/themes';
 import { Session } from 'next-auth';
 
 import AddOrganizationModal from '@/components/AddOrganizationModal';
@@ -40,8 +49,8 @@ export default function FirstColumn({
               {organization.description && <p>{organization.description}</p>}
               {organization.owner.toString() === session?.user?.id && (
                 <>
-                  <span>{session.user.name}</span>
-                  <span>Owner</span>
+                  <span>{session.user.name}</span>{' '}
+                  <Badge color="gray">Owner</Badge>
                 </>
               )}
             </div>
@@ -95,66 +104,14 @@ export default function FirstColumn({
 
       <Card size="4">
         <Heading as="h3" size="6" trim="start" mb="2">
-          Pricing
+          Charts
         </Heading>
 
         <Text as="p" size="2" mb="5" color="gray">
-          No credit card required. Every plan includes a 30-day trial of all Pro
-          features.
+          Charts will go here
         </Text>
 
-        <Grid columns="3" gap="6">
-          <Flex direction="column">
-            <Text weight="bold" size="5" mb="1">
-              Basic
-            </Text>
-            <Text color="gray" size="2" mb="4">
-              3 team members
-            </Text>
-            <Text weight="bold" size="5" mb="4">
-              $0
-              <Text size="5" weight="bold" style={{ color: 'var(--gray-a8)' }}>
-                {' / mo'}
-              </Text>
-            </Text>
-
-            <Flex direction="column" gap="2"></Flex>
-          </Flex>
-
-          <Flex direction="column">
-            <Text weight="bold" size="5" mb="1">
-              Growth
-            </Text>
-            <Text color="gray" size="2" mb="4">
-              10 team members
-            </Text>
-            <Text weight="bold" size="5" mb="4">
-              $49
-              <Text size="5" weight="bold" style={{ color: 'var(--gray-a8)' }}>
-                {' / mo'}
-              </Text>
-            </Text>
-
-            <Flex direction="column" gap="2"></Flex>
-          </Flex>
-
-          <Flex direction="column">
-            <Text weight="bold" size="5" mb="1">
-              Pro
-            </Text>
-            <Text color="gray" size="2" mb="4">
-              Unlimited team members
-            </Text>
-            <Text weight="bold" size="5" mb="4">
-              $99
-              <Text size="5" weight="bold" style={{ color: 'var(--gray-a8)' }}>
-                {' / mo'}
-              </Text>
-            </Text>
-
-            <Flex direction="column" gap="2"></Flex>
-          </Flex>
-        </Grid>
+        <Grid columns="3" gap="6"></Grid>
       </Card>
     </Flex>
   );
