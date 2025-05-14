@@ -7,7 +7,7 @@ import { Box, Button, Flex, Text } from '@radix-ui/themes';
 
 import camelCaseToTitleCase from '@/app/utils/camelCaseToTitleCase';
 import titleCaseToCamelCase from '@/app/utils/titleCaseToCamelCase';
-import Modal from '@/components/Modal';
+import Modal from '@/components/ui/Modal';
 
 interface Status {
   name: string;

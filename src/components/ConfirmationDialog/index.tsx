@@ -7,7 +7,6 @@ import styles from './confirmationDialog.module.css';
 import { Button } from '../ui/Button/Button';
 
 interface IConfirmationDialog {
-  // isOpen: boolean;
   title: string;
   triggerText: React.ReactNode;
   message: string;

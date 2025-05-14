@@ -14,7 +14,7 @@ import {
 } from '@radix-ui/themes';
 import { Session } from 'next-auth';
 
-import AddOrganizationModal from '@/components/AddOrganizationModal';
+import AddOrganizationModal from '@/app/(DashboardPages)/dashboard/AddOrganizationModal';
 import AddProjectModal from '@/components/AddProjectModal';
 import { IOrganization } from '@/db/models/Organization';
 import { IProject } from '@/db/models/Project';

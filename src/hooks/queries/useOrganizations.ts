@@ -10,6 +10,9 @@ interface Organization {
   members: string[];
 }
 
+// *
+// * Fetch Organization
+// *
 export function useOrganization() {
   return useQuery<Organization | null>({
     queryKey: ['organization'],
@@ -17,6 +20,9 @@ export function useOrganization() {
   });
 }
 
+// *
+// * Create Organization
+// *
 export function useCreateOrganization() {
   const queryClient = useQueryClient();
 

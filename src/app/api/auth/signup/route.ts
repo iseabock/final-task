@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // * Check if user already exists
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // * Create new user - password will be hashed by the pre-save middleware
+    // Create new user - password will be hashed by the pre-save middleware
     const newUser = new User({
       name,
       email,
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     await newUser.save();
 
-    // * Return user data (excluding password)
+    // Return user data (excluding password)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = newUser.toObject();
     return NextResponse.json(userWithoutPassword, { status: 201 });

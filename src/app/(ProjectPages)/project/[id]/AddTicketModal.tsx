@@ -12,8 +12,8 @@ import {
 } from '@radix-ui/themes';
 import mongoose from 'mongoose';
 
-import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/Button/Button';
+import Modal from '@/components/ui/Modal';
 import { Select } from '@/components/ui/Select/Select';
 import { IUser } from '@/db/models/User';
 

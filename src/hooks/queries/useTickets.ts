@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import mongoose from 'mongoose';
 
@@ -28,6 +30,9 @@ interface CreateTicketData {
   projectId: mongoose.Types.ObjectId;
 }
 
+// *
+// * Fetch Tickets
+// *
 export function useTickets(projectId: string | undefined) {
   return useQuery<Ticket[]>({
     queryKey: ['tickets', projectId],
@@ -39,6 +44,9 @@ export function useTickets(projectId: string | undefined) {
   });
 }
 
+// *
+// * Create Ticket
+// *
 export function useCreateTicket() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -59,3 +67,33 @@ export function useCreateTicket() {
     },
   });
 }
+
+// *
+// * Delete Ticket
+// *
+export const useDeleteTicket = (onTicketDeleted: (id: string) => void) => {
+  return useCallback(
+    async (ticketId: string, projectId: string) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}/tickets`,
+          {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(ticketId),
+          }
+        );
+
+        if (!response.ok) {
+          const message = `Error: ${response.status}`;
+          throw new Error(message);
+        }
+
+        onTicketDeleted(ticketId);
+      } catch (error) {
+        console.error('There was an error deleting the item:', error);
+      }
+    },
+    [onTicketDeleted]
+  );
+};

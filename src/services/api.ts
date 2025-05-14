@@ -1,7 +1,9 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export const api = {
+  // *
   // * Organizations endpoints
+  // *
   organizations: {
     list: async () => {
       const res = await fetch(`${BASE_URL}/api/organizations`);
@@ -22,7 +24,9 @@ export const api = {
       return res.json();
     },
   },
+  // *
   // * Projects endpoints
+  // *
   projects: {
     list: async (organizationId: string) => {
       const res = await fetch(
@@ -77,7 +81,9 @@ export const api = {
       if (!res.ok) throw new Error('Failed to delete project');
       return res.json();
     },
+    // *
     // * Project users endpoints
+    // *
     users: {
       list: async (projectId: string) => {
         const res = await fetch(`${BASE_URL}/api/projects/${projectId}/users`);
@@ -104,7 +110,9 @@ export const api = {
         return res.json();
       },
     },
+    // *
     // * Project tickets endpoints
+    // *
     tickets: {
       list: async (projectId: string) => {
         const res = await fetch(

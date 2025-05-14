@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { Text, TextField } from '@radix-ui/themes';
 import { Session } from 'next-auth';
 
-import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/Button/Button';
+import Modal from '@/components/ui/Modal';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
 import { useCreateProject } from '@/hooks/queries/useProjects';
 

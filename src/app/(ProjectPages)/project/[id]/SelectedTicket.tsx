@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/Button/Button';
 import { Select } from '@/components/ui/Select/Select';
 import { ITicket } from '@/db/models/Ticket';
 import { IUser } from '@/db/models/User';
-import { useDeleteTicket } from '@/hooks/useDeleteTicket';
+import { useDeleteTicket } from '@/hooks/queries/useTickets';
 
 import styles from './ticket.module.css';
 

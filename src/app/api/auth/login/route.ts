@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // * Find user by email
+    // Find user by email
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // * Compare passwords using the model method
+    // Compare passwords using the model method
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // * Return user data (excluding password)
+    // Return user data (excluding password)
     const userData = user.toObject();
     delete userData.password;
     return NextResponse.json(userData, { status: 200 });

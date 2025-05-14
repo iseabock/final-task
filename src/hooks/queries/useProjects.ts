@@ -19,6 +19,9 @@ interface CreateProjectData {
   organization_id: string;
 }
 
+// *
+// * Fetch Projects
+// *
 export function useProjects(organizationId: string | undefined) {
   return useQuery<Project[]>({
     queryKey: ['projects', organizationId],
@@ -30,6 +33,9 @@ export function useProjects(organizationId: string | undefined) {
   });
 }
 
+// *
+// * Create Project
+// *
 export function useCreateProject() {
   const queryClient = useQueryClient();
   return useMutation({

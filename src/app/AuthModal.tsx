@@ -6,8 +6,8 @@ import { TextField } from '@radix-ui/themes';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/Button/Button';
+import Modal from '@/components/ui/Modal';
 
 type AuthMode = 'login' | 'signup';
 

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button/Button';
 import { useCreateOrganization } from '@/hooks/queries/useOrganizations';
 
-import Modal from './Modal';
+import Modal from '../../../components/ui/Modal';
 
 export default function AddOrganizationModal({
   open,

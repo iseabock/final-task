@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 import { Text, TextField } from '@radix-ui/themes';
 
-import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/Button/Button';
+import Modal from '@/components/ui/Modal';
 
 const AddUserModal = ({ fetchUsers }: { fetchUsers: () => void }) => {
   const [name, setName] = useState('');
