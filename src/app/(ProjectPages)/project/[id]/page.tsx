@@ -1,9 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GearIcon } from '@radix-ui/react-icons';
-import { Box, Button, Flex, Heading, Link, Spinner } from '@radix-ui/themes';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  Spinner,
+  Tooltip,
+} from '@radix-ui/themes';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import mongoose from 'mongoose';
 import { useParams } from 'next/navigation';
 
@@ -26,6 +35,7 @@ const ProjectPage = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
   const [project, setProject] = useState<IProject>();
   const [users, setUsers] = useState<IUser[]>([]);
+  const [showBacklog, setShowBacklog] = useState(false);
   const [draggingOverColumn, setDraggingOverColumn] = useState<string | null>(
     null
   );
@@ -67,7 +77,7 @@ const ProjectPage = () => {
       }
       setTickets(data);
       if (selectedTicket === undefined && data.length > 0) {
-        setSelectedTicket(data[0]);
+        setSelectedTicket(data.find((t) => t.status !== 'backlog'));
       }
     } catch (error) {
       console.error('Error fetching tickets:', error);
@@ -207,62 +217,86 @@ const ProjectPage = () => {
           <GearIcon /> Configure
         </Button>
       </Flex>
-      <Flex gap="3">
+      <Flex gap="3" position="relative">
+        <>
+          {showBacklog ? (
+            <Tooltip content="Close Backlog">
+              <PanelLeftClose
+                onClick={() => setShowBacklog(false)}
+                className={styles.backlogIcon}
+                size={40}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip content="Open Backlog">
+              <PanelLeftOpen
+                onClick={() => setShowBacklog(true)}
+                className={styles.backlogIcon}
+                size={40}
+              />
+            </Tooltip>
+          )}
+        </>
         <Flex className={styles.ticketsContainer} gap="3" align="start">
           {projectConfig.statuses.map((status) => {
             const statusTickets = getTicketsByStatus(status.name);
             return (
-              <Box
-                key={status.name}
-                className={`${styles.column} ${
-                  draggingOverColumn === status.name &&
-                  draggedFromColumn !== status.name
-                    ? styles.dragOver
-                    : ''
-                }`}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setDraggingOverColumn(status.name);
-                }}
-                onDragLeave={() => setDraggingOverColumn(null)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  const ticketId = e.dataTransfer.getData('ticketId');
-                  updateTicketStatus(ticketId, status.name);
-                  setDraggingOverColumn(null);
-                }}
-              >
-                <Flex justify="between" align="center" mb="3">
-                  <Heading size="3">
-                    {camelCaseToTitleCase(status.name)}
-                  </Heading>
-                  {status.name === 'open' && (
-                    <AddTicketModal
-                      projectId={id as string}
-                      onTicketAdded={handleTicketAdded}
-                    />
-                  )}
-                </Flex>
-
-                {statusTickets.map((ticket) => (
-                  <Ticket
-                    key={ticket._id.toString()}
-                    ticket={ticket}
-                    assignee={
-                      users.find(
-                        (user) =>
-                          user._id.toString() === ticket.assignee?.toString()
-                      )?.name
-                    }
-                    column={ticket.status}
-                    onClick={() => handleSelectedTicket(ticket)}
-                    selected={
-                      selectedTicket?._id.toString() === ticket._id.toString()
-                    }
-                    setDraggedFromColumn={setDraggedFromColumn}
-                  />
-                ))}
-              </Box>
+              <React.Fragment key={status.name}>
+                {((status.name === 'backlog' && showBacklog) ||
+                  status.name !== 'backlog') && (
+                  <Box
+                    className={`${styles.column} ${
+                      draggingOverColumn === status.name &&
+                      draggedFromColumn !== status.name
+                        ? styles.dragOver
+                        : ''
+                    } ${status.name === 'backlog' ? styles.backlog : ''}`}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDraggingOverColumn(status.name);
+                    }}
+                    onDragLeave={() => setDraggingOverColumn(null)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      const ticketId = e.dataTransfer.getData('ticketId');
+                      updateTicketStatus(ticketId, status.name);
+                      setDraggingOverColumn(null);
+                    }}
+                  >
+                    <Flex justify="between" align="center" mb="3">
+                      <Heading size="3">
+                        {camelCaseToTitleCase(status.name)}
+                      </Heading>
+                      {status.name !== 'backlog' && status.name === 'open' && (
+                        <AddTicketModal
+                          projectId={id as string}
+                          onTicketAdded={handleTicketAdded}
+                        />
+                      )}
+                    </Flex>
+                    {statusTickets.map((ticket) => (
+                      <Ticket
+                        key={ticket._id.toString()}
+                        ticket={ticket}
+                        assignee={
+                          users.find(
+                            (user) =>
+                              user._id.toString() ===
+                              ticket.assignee?.toString()
+                          )?.name
+                        }
+                        column={ticket.status}
+                        onClick={() => handleSelectedTicket(ticket)}
+                        selected={
+                          selectedTicket?._id.toString() ===
+                          ticket._id.toString()
+                        }
+                        setDraggedFromColumn={setDraggedFromColumn}
+                      />
+                    ))}
+                  </Box>
+                )}
+              </React.Fragment>
             );
           })}
         </Flex>

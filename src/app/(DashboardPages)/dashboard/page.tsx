@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex } from '@radix-ui/themes';
+import { Box, Flex, Spinner } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -8,6 +8,8 @@ import { IOrganization } from '@/db/models/Organization';
 import { IProject } from '@/db/models/Project';
 import { useOrganization } from '@/hooks/queries/useOrganizations';
 import { useProjects } from '@/hooks/queries/useProjects';
+
+import styles from './dashboard.module.css';
 
 import FirstColumn from './FirstColumn';
 import SecondColumn from './SecondColumn';
@@ -36,9 +38,9 @@ export default function DashboardPage() {
 
   if (status === 'loading' || isLoadingOrg) {
     return (
-      <div>
-        <div>Loading...</div>
-      </div>
+      <Box className={styles.spinnerContainer}>
+        <Spinner size="3" />
+      </Box>
     );
   }
 
